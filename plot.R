@@ -65,7 +65,12 @@ events <- tribble(
 
 levels <- events %>% group_by(who) %>% tally() %>% arrange(desc(n))
 
+#color the top 20% of the commentors, just because
+the_most <- levels %>% top_frac(.2, n) %>% nrow()
+
 events <- events %>% mutate(who = factor(who, levels = levels$who))
+
+rose_colored_glasses <- "#FF9ECF"
 
 covid_longer_j %>%
   ggplot() + 
@@ -83,8 +88,9 @@ covid_longer_j %>%
   geom_label_repel(data = events %>% arrange(desc(who)), 
                    aes(x=date, y=infections, label = label, fill = who),
                    arrow = NULL, direction="y", hjust = 1, size = 3.5,
+                   box.padding = 1,
                    xlim = c(NA,ymd("2020-03-01")),
                    ylim = c(100, max(covid_case_longer$infections)),
                    show.legend = FALSE) +
-  scale_fill_manual(values = c(rep("pink", 3), rep("white", nrow(levels) -3 ))) +
+  scale_fill_manual(values = c(rep(rose_colored_glasses, the_most), rep("white", nrow(levels) - the_most ))) +
   theme_few()
