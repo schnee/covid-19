@@ -59,11 +59,14 @@ events <- tribble(
   ymd("2020-03-20"), "Donald Trump", "Coming together is much harder when we have dishonest journalists",
   ymd("2020-03-20"), "Donald Trump","there is a very low incidence of death"
 ) %>% arrange(date) %>% 
-  left_join(covid_longer) %>% 
+  left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
          label = str_wrap(label, width = 60))
 
-# TODO - color code annotations by the 'who'
+levels <- events %>% group_by(who) %>% tally() %>% arrange(desc(n))
+
+events <- events %>% mutate(who = factor(who, levels = levels$who))
+
 covid_longer_j %>%
   ggplot() + 
   geom_col(aes(x=date, y=infections)) +
@@ -77,8 +80,11 @@ covid_longer_j %>%
     caption = "Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets"
   ) + 
   #geom_vline(xintercept = events$date) +
-  geom_label_repel(data = events %>% arrange(desc(who)), aes(x=date, y=infections, label = label),
+  geom_label_repel(data = events %>% arrange(desc(who)), 
+                   aes(x=date, y=infections, label = label, fill = who),
                    arrow = NULL, direction="y", hjust = 1, size = 3.5,
                    xlim = c(NA,ymd("2020-03-01")),
-                   ylim = c(100, max(covid_longer$infections))) +
+                   ylim = c(100, max(covid_case_longer$infections)),
+                   show.legend = FALSE) +
+  scale_fill_manual(values = c(rep("pink", 3), rep("white", nrow(levels) -3 ))) +
   theme_few()
