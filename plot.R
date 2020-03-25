@@ -15,8 +15,8 @@ filter_pivot <- function(tib){
 }
   
 
-covid <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv")
-covid_death <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv")
+covid <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+covid_death <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv")
 
 covid_case_longer <- filter_pivot(covid) %>% 
   rename(infections = sum_ct)
@@ -57,7 +57,9 @@ events <- tribble(
   ymd("2020-03-19"), "Mary Colbert", "in China,...eating bats and snakes...unclean animal",
   ymd("2020-03-19"), "Donald Trump", "could have been stopped ... [if known about it earlier]",
   ymd("2020-03-20"), "Donald Trump", "Coming together is much harder when we have dishonest journalists",
-  ymd("2020-03-20"), "Donald Trump","there is a very low incidence of death"
+  ymd("2020-03-20"), "Donald Trump","there is a very low incidence of death",
+  ymd("2020-03-22"), "Steve Mnuchin", "Nobody expected this to take off at the rate it did",
+  ymd("2020-03-23"), "John Cornyn", "Blah Blah Blah"
 ) %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
