@@ -59,7 +59,7 @@ events <- tribble(
   ymd("2020-03-20"), "Donald Trump", "Coming together is much harder when we have dishonest journalists",
   ymd("2020-03-20"), "Donald Trump","there is a very low incidence of death",
   ymd("2020-03-22"), "Steve Mnuchin", "Nobody expected this to take off at the rate it did",
-  ymd("2020-03-23"), "John Cornyn", "Blah Blah Blah"
+  ymd("2020-03-22"), "John Cornyn", "Blah Blah Blah"
 ) %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
