@@ -32,6 +32,7 @@ events <- tribble(
   ~date, ~who, ~desc,
   ymd("2020-01-22"), "Donald Trump","totally under control",
   ymd("2020-02-02"), "Donald Trump", "We pretty much shut it down",
+  ymd("2020-02-05"), "Alex Azar", "didn't need additional [emergency] funding", 
   ymd("2020-01-30"), "Donald Trump", "we have it very well under control",
   ymd("2020-02-29"), "Donald Trump", "Everything is really under control",
   ymd("2020-03-13"), "", "US Declares Natl Emergency",
@@ -62,7 +63,8 @@ events <- tribble(
   ymd("2020-03-22"), "John Cornyn", "Blah Blah Blah",
   ymd("2020-03-26"), "Donald Trump", "I don't believe you need 40000 or 30000 ventilators",
   ymd("2020-03-27"), "Donald Trump", "I'm not sure anybody even knows what [the coronavirus] is",
-  ymd("2020-03-27"), "Donald Trump", "none of [the former Presidents] ever thought a thing like this could happen"
+  ymd("2020-03-27"), "Donald Trump", "none of [the former Presidents] ever thought a thing like this could happen",
+  ymd("2020-03-27"), "Rush Limbaugh", "We didn't elect a president to defer to a bunch of health experts that we don't know"
 ) %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
