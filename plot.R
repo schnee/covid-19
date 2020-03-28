@@ -59,11 +59,14 @@ events <- tribble(
   ymd("2020-03-20"), "Donald Trump", "Coming together is much harder when we have dishonest journalists",
   ymd("2020-03-20"), "Donald Trump","there is a very low incidence of death",
   ymd("2020-03-22"), "Steve Mnuchin", "Nobody expected this to take off at the rate it did",
-  ymd("2020-03-22"), "John Cornyn", "Blah Blah Blah"
+  ymd("2020-03-22"), "John Cornyn", "Blah Blah Blah",
+  ymd("2020-03-26"), "Donald Trump", "I don't believe you need 40000 or 30000 ventilators",
+  ymd("2020-03-27"), "Donald Trump", "I'm not sure anybody even knows what [the coronavirus] is",
+  ymd("2020-03-27"), "Donald Trump", "none of [the former Presidents] ever thought a thing like this could happen"
 ) %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
-         label = str_wrap(label, width = 60))
+         label = str_wrap(label, width = 160))
 
 levels <- events %>% group_by(who) %>% tally() %>% arrange(desc(n))
 
@@ -72,7 +75,7 @@ the_most <- levels %>% top_frac(.2, n) %>% nrow()
 
 events <- events %>% mutate(who = factor(who, levels = levels$who))
 
-rose_colored_glasses <- "#FF9ECF"
+rose_colored_glasses <- "white" ##FF9ECF"
 
 covid_longer_j %>%
   ggplot() + 
