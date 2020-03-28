@@ -92,10 +92,14 @@ covid_longer_j %>%
   #geom_vline(xintercept = events$date) +
   geom_label_repel(data = events %>% arrange(desc(who)), 
                    aes(x=date, y=infections, label = label, fill = who),
-                   arrow = NULL, direction="y", hjust = 1, size = 3.5,
+                   arrow = NULL, 
+                   direction="y", 
+                   hjust = 1, size = 3.5,
                    box.padding = 1,
                    xlim = c(NA,ymd("2020-03-01")),
                    ylim = c(100, max(covid_case_longer$infections)),
                    show.legend = FALSE) +
   scale_fill_manual(values = c(rep(rose_colored_glasses, the_most), rep("white", nrow(levels) - the_most ))) +
   theme_few()
+
+ggsave("covid-crazy.png", width = 16, height=9, dpi = 100)
