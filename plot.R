@@ -61,6 +61,7 @@ events <- tribble(
   ymd("2020-03-20"), "Donald Trump","there is a very low incidence of death",
   ymd("2020-03-22"), "Steve Mnuchin", "Nobody expected this to take off at the rate it did",
   ymd("2020-03-22"), "John Cornyn", "Blah Blah Blah",
+  ymd("2020-03-24"), "Kathaleen Wall", "#COVID19 will save more lives this week than it takes!",
   ymd("2020-03-26"), "Donald Trump", "I don't believe you need 40000 or 30000 ventilators",
   ymd("2020-03-27"), "Donald Trump", "I'm not sure anybody even knows what [the coronavirus] is",
   ymd("2020-03-27"), "Donald Trump", "none of [the former Presidents] ever thought a thing like this could happen",
