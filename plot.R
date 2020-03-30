@@ -84,7 +84,7 @@ rose_colored_glasses <- "white" ##FF9ECF"
 covid_longer_j %>%
   ggplot() + 
   geom_col(aes(x=date, y=infections)) +
-  geom_area(aes(x=date, y=deaths*10), fill = "red", alpha = 0.5) +
+  geom_area(aes(x=date, y=deaths*10), fill = "red", alpha = 0.75) +
   scale_y_continuous(sec.axis = sec_axis(~.*0.1, name = "Deaths", 
                                          labels = scales::label_comma()), 
                      labels = scales::label_comma()) +
