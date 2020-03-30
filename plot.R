@@ -1,4 +1,5 @@
 library(tidyverse)
+library(googledrive)
 library(lubridate)
 library(ggrepel)
 library(ggthemes)
@@ -111,4 +112,11 @@ covid_longer_j %>%
         axis.title.y.right = element_text(color = "red"),
         axis.text.y.right = element_text(color = "red"))
 
-ggsave("covid-crazy.png", width = 16, height=9, dpi = 100)
+img_name <- "covid-crazy.png"
+ggsave(img_name, width = 16, height=9, dpi = 100)
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) == 1) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}
