@@ -84,7 +84,7 @@ covid_longer_j %>%
   ggplot() + 
   geom_col(aes(x=date, y=infections)) +
   geom_area(aes(x=date, y=deaths*10), fill = "red", alpha = 0.5) +
-  scale_y_continuous(sec.axis = sec_axis(~.*0.1, name = "Deaths")) +
+  scale_y_continuous(sec.axis = sec_axis(~.*0.1, name = "Deaths"), labels = scales::label_comma()) +
   #scale_y_log10() +
   labs(
     title = "COVID-19 US Cases",
