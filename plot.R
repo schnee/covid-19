@@ -65,7 +65,8 @@ events <- tribble(
   ymd("2020-03-26"), "Donald Trump", "I don't believe you need 40000 or 30000 ventilators",
   ymd("2020-03-27"), "Donald Trump", "I'm not sure anybody even knows what [the coronavirus] is",
   ymd("2020-03-27"), "Donald Trump", "none of [the former Presidents] ever thought a thing like this could happen",
-  ymd("2020-03-27"), "Rush Limbaugh", "We didn't elect a president to defer to a bunch of health experts that we don't know"
+  ymd("2020-03-27"), "Rush Limbaugh", "We didn't elect a president to defer to a bunch of health experts that we don't know",
+  ymd("2020-03-29"), "Donald Trump", "the \'Ratings\' of my News Conferences etc. are so high, \'Bachelor finale, Monday Night Football type numbers\'"
 ) %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
@@ -84,7 +85,9 @@ covid_longer_j %>%
   ggplot() + 
   geom_col(aes(x=date, y=infections)) +
   geom_area(aes(x=date, y=deaths*10), fill = "red", alpha = 0.5) +
-  scale_y_continuous(sec.axis = sec_axis(~.*0.1, name = "Deaths"), labels = scales::label_comma()) +
+  scale_y_continuous(sec.axis = sec_axis(~.*0.1, name = "Deaths", 
+                                         labels = scales::label_comma()), 
+                     labels = scales::label_comma()) +
   #scale_y_log10() +
   labs(
     title = "COVID-19 US Cases",
@@ -103,6 +106,9 @@ covid_longer_j %>%
                    ylim = c(100, max(covid_case_longer$infections)),
                    show.legend = FALSE) +
   scale_fill_manual(values = c(rep(rose_colored_glasses, the_most), rep("white", nrow(levels) - the_most ))) +
-  theme_few()
+  theme_few() +
+  theme(axis.ticks.y.right = element_line(color = "red"),
+        axis.title.y.right = element_text(color = "red"),
+        axis.text.y.right = element_text(color = "red"))
 
 ggsave("covid-crazy.png", width = 16, height=9, dpi = 100)
