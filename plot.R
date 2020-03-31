@@ -68,7 +68,8 @@ events <- tribble(
   ymd("2020-03-27"), "Donald Trump", "none of [the former Presidents] ever thought a thing like this could happen",
   ymd("2020-03-27"), "Rush Limbaugh", "We didn't elect a president to defer to a bunch of health experts that we don't know",
   ymd("2020-03-29"), "Donald Trump", "the \'Ratings\' of my News Conferences etc. are so high, \'Bachelor finale, Monday Night Football type numbers\'",
-  ymd("2020-03-29"), "Donald Trump", "If we have between 100k and 200k deaths, we've altogether done a very good job"
+  ymd("2020-03-29"), "Donald Trump", "If we have between 100k and 200k deaths, we've altogether done a very good job",
+  ymd("2020-03-31"), "Mitch McConnell", "it diverted the attention of the government because everything every day was all about impeachment"
 ) %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
@@ -85,8 +86,8 @@ rose_colored_glasses <- "white" ##FF9ECF"
 
 covid_longer_j %>%
   ggplot() + 
-  geom_col(aes(x=date, y=infections), width=1, position = position_nudge((x=-0.5))) +
-  geom_area(aes(x=date, y=deaths*10), fill = "red", alpha = 0.75) +
+  geom_col(aes(x=date, y=infections), width=1) +
+  geom_area(aes(x=date, y=deaths*10), fill = "red", alpha = 0.75, position = position_nudge((x=0.5))) +
   scale_y_continuous(sec.axis = sec_axis(~.*0.1, name = "Deaths", 
                                          labels = scales::label_comma()), 
                      labels = scales::label_comma()) +
