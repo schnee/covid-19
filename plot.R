@@ -69,7 +69,8 @@ events <- tribble(
   ymd("2020-03-27"), "Rush Limbaugh", "We didn't elect a president to defer to a bunch of health experts that we don't know",
   ymd("2020-03-29"), "Donald Trump", "the \'Ratings\' of my News Conferences etc. are so high, \'Bachelor finale, Monday Night Football type numbers\'",
   ymd("2020-03-29"), "Donald Trump", "If we have between 100k and 200k deaths, we've altogether done a very good job",
-  ymd("2020-03-31"), "Mitch McConnell", "it diverted the attention of the government because everything every day was all about impeachment"
+  ymd("2020-03-31"), "Mitch McConnell", "it diverted the attention of the government because everything every day was all about impeachment",
+  ymd("2020-04-01"), "Donald Trump","Did you know I was number one on Facebook? I just found out I’m number one on Facebook"
 ) %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
@@ -102,8 +103,9 @@ covid_longer_j %>%
   geom_label_repel(data = events %>% arrange(desc(who)), 
                    aes(x=date, y=infections, label = label, fill = who),
                    arrow = NULL, 
+                   force = 1,
                    direction="y", 
-                   hjust = 1, size = 3.5,
+                   hjust = 1, size = 3.3,
                    box.padding = 1,
                    xlim = c(NA,ymd("2020-03-01")),
                    ylim = c(100, max(covid_case_longer$infections)),
