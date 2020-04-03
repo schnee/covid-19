@@ -3,6 +3,7 @@ library(googledrive)
 library(lubridate)
 library(ggrepel)
 library(ggthemes)
+library(forcats)
 
 filter_pivot <- function(tib){
   tib <- tib %>% filter(`Country/Region` == "US") %>% 
@@ -74,14 +75,14 @@ events <- tribble(
 ) %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
-         label = str_wrap(label, width = 60))
+         label = str_wrap(label, width = 160))
 
 levels <- events %>% group_by(who) %>% tally() %>% arrange(desc(n))
 
 #color the top 20% of the commentors, just because
 the_most <- levels %>% top_frac(.2, n) %>% nrow()
 
-events <- events %>% mutate(who = factor(who, levels = levels$who))
+events <- events %>% mutate(who = fct_infreq(who))
 
 rose_colored_glasses <- "white" ##FF9ECF"
 
@@ -106,7 +107,7 @@ covid_longer_j %>%
                    direction="y", 
                    hjust = 0, size = 3.3,
                    box.padding = 1,
-                   xlim = c(NA,ymd("2020-03-01")),
+                   xlim = c(min(covid_case_longer$date),ymd("2020-03-01")),
                    ylim = c(100, max(covid_case_longer$infections)),
                    show.legend = FALSE) +
   scale_fill_manual(values = c(rep(rose_colored_glasses, the_most), rep("white", nrow(levels) - the_most ))) +
