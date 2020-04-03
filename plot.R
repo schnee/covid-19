@@ -74,7 +74,7 @@ events <- tribble(
 ) %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
-         label = str_wrap(label, width = 160))
+         label = str_wrap(label, width = 60))
 
 levels <- events %>% group_by(who) %>% tally() %>% arrange(desc(n))
 
@@ -99,13 +99,12 @@ covid_longer_j %>%
     x = "Date",
     caption = "Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets"
   ) + 
-  #geom_vline(xintercept = events$date) +
   geom_label_repel(data = events %>% arrange(desc(who)), 
                    aes(x=date, y=infections, label = label, fill = who),
                    arrow = NULL, 
                    force = 1,
                    direction="y", 
-                   hjust = 1, size = 3.3,
+                   hjust = 0, size = 3.3,
                    box.padding = 1,
                    xlim = c(NA,ymd("2020-03-01")),
                    ylim = c(100, max(covid_case_longer$infections)),
