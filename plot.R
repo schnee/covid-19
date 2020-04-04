@@ -100,14 +100,14 @@ covid_longer_j %>%
     x = "Date",
     caption = "Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets"
   ) + 
-  geom_label_repel(data = events %>% arrange(desc(who)), 
+  geom_label_repel(data = events,
                    aes(x=date, y=infections, label = label, fill = who),
                    arrow = NULL, 
                    force = 1,
                    direction="y", 
-                   hjust = 0, size = 3.3,
+                   hjust = 1, size = 3.3,
                    box.padding = 1,
-                   xlim = c(min(covid_case_longer$date),ymd("2020-03-01")),
+                   xlim = c(min(covid_case_longer$date), ymd("2020-03-01")),
                    ylim = c(100, max(covid_case_longer$infections)),
                    show.legend = FALSE) +
   scale_fill_manual(values = c(rep(rose_colored_glasses, the_most), rep("white", nrow(levels) - the_most ))) +
