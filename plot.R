@@ -71,7 +71,8 @@ events <- tribble(
   ymd("2020-03-29"), "Donald Trump", "the \'Ratings\' of my News Conferences etc. are so high, \'Bachelor finale, Monday Night Football type numbers\'",
   ymd("2020-03-29"), "Donald Trump", "If we have between 100k and 200k deaths, we've altogether done a very good job",
   ymd("2020-03-31"), "Mitch McConnell", "it diverted the attention of the government because everything every day was all about impeachment",
-  ymd("2020-04-01"), "Donald Trump","Did you know I was number one on Facebook? I just found out I’m number one on Facebook"
+  ymd("2020-04-01"), "Donald Trump","Did you know I was number one on Facebook? I just found out I’m number one on Facebook",
+  ymd("2020-04-03"), "Donald Trump", "I was never involved in a model. But—at least this kind of a model"
 ) %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
