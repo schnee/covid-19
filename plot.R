@@ -87,6 +87,16 @@ events <- events %>% mutate(who = fct_infreq(who))
 
 rose_colored_glasses <- "white" ##FF9ECF"
 
+casualties <- tribble(
+  ~what, ~ct,
+  "Benghazi", 4,
+  "9/11", 2977,
+  "Afghanistan", 2440,
+  "Vietnam", 58220,
+  "Desert Storm", 383,
+  "Vince Foster", 1
+) %>% mutate(what = fct_reorder(what, -ct))
+
 covid_longer_j %>%
   ggplot() + 
   geom_col(aes(x=date, y=infections), width=1) +
@@ -115,7 +125,10 @@ covid_longer_j %>%
   theme_few() +
   theme(axis.ticks.y.right = element_line(color = "red"),
         axis.title.y.right = element_text(color = "red"),
-        axis.text.y.right = element_text(color = "red"))
+        axis.text.y.right = element_text(color = "red")) +
+  geom_rug(data = casualties %>% filter(ct < max(covid_longer_j$deaths)), 
+           aes(y=ct*10, color = what), sides="r") +
+  scale_color_few(palette = "Dark", "Comparison\nValue")
 
 img_name <- "covid-crazy.png"
 ggsave(img_name, width = 16, height=9, dpi = 100)
