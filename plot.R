@@ -101,12 +101,13 @@ covid_longer_j %>%
   ggplot() + 
   geom_col(aes(x=date, y=infections), width=1) +
   geom_area(aes(x=date, y=deaths*10), fill = "red", alpha = 0.75, position = position_nudge((x=0.5))) +
-  scale_y_continuous(sec.axis = sec_axis(~.*0.1, name = "Deaths", 
+  scale_y_continuous(sec.axis = sec_axis(~.*0.1, name = "Casualties", 
                                          labels = scales::label_comma()), 
                      labels = scales::label_comma()) +
   #scale_y_log10() +
   labs(
     title = "COVID-19 US Cases",
+    subtitle = paste("Current Infections:",max(covid_longer_j$infections), "Casualties:", max(covid_longer_j$deaths)),
     y = "Infections",
     x = "Date",
     caption = "Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets"
