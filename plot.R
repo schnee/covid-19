@@ -118,7 +118,7 @@ covid_longer_j %>%
                    direction="y", 
                    hjust = 1, size = 3.3,
                    box.padding = 1,
-                   xlim = c(min(covid_case_longer$date), ymd("2020-03-01")),
+                   xlim = c(min(covid_case_longer$date), today() - days(30)),
                    ylim = c(100, max(covid_case_longer$infections)),
                    show.legend = FALSE) +
   scale_fill_manual(values = c(rep(rose_colored_glasses, the_most), rep("white", nrow(levels) - the_most ))) +
@@ -128,7 +128,7 @@ covid_longer_j %>%
         axis.text.y.right = element_text(color = "red")) +
   geom_rug(data = casualties %>% filter(ct < max(covid_longer_j$deaths)), 
            aes(y=ct*10, color = what), sides="r") +
-  scale_color_few(palette = "Dark", "Comparison\nValue")
+  scale_color_few(palette = "Dark", "Other\nCasualties")
 
 img_name <- "covid-crazy.png"
 ggsave(img_name, width = 16, height=9, dpi = 100)
