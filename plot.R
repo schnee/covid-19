@@ -73,7 +73,8 @@ events <- tribble(
   ymd("2020-03-31"), "Mitch McConnell", "it diverted the attention of the government because everything every day was all about impeachment",
   ymd("2020-04-01"), "Donald Trump","Did you know I was number one on Facebook? I just found out I’m number one on Facebook",
   ymd("2020-04-03"), "Donald Trump", "I was never involved in a model. But—at least this kind of a model",
-  ymd("2020-04-07"), "Donald Trump", "Well, the cases really didn’t build up for a while."
+  ymd("2020-04-07"), "Donald Trump", "Well, the cases really didn’t build up for a while.",
+  ymd("2020-04-08"), "Donald Trump", "the ratings are through the roof...'Monday Night Football, Bachelor Finale' type numbers"
 ) %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
@@ -113,7 +114,8 @@ covid_longer_j %>%
     subtitle = paste("Current Infections:",max(covid_longer_j$infections), "Casualties:", max(covid_longer_j$deaths)),
     y = "Infections",
     x = "Date",
-    caption = "Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets"
+    caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets\n",
+                     today())
   ) + 
   geom_label_repel(data = events,
                    aes(x=date, y=infections, label = label, fill = who),
