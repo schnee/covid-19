@@ -72,7 +72,8 @@ events <- tribble(
   ymd("2020-03-29"), "Donald Trump", "If we have between 100k and 200k deaths, we've altogether done a very good job",
   ymd("2020-03-31"), "Mitch McConnell", "it diverted the attention of the government because everything every day was all about impeachment",
   ymd("2020-04-01"), "Donald Trump","Did you know I was number one on Facebook? I just found out I’m number one on Facebook",
-  ymd("2020-04-03"), "Donald Trump", "I was never involved in a model. But—at least this kind of a model"
+  ymd("2020-04-03"), "Donald Trump", "I was never involved in a model. But—at least this kind of a model",
+  ymd("2020-04-07"), "Donald Trump", "Well, the cases really didn’t build up for a while."
 ) %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
@@ -94,7 +95,9 @@ casualties <- tribble(
   "Afghanistan", 2440,
   "Vietnam", 58220,
   "Desert Storm", 383,
-  "Vince Foster", 1
+  "Vince Foster", 1,
+  "2017 Las Vegas", 58,
+  "H1N1-2009", 12469
 ) %>% mutate(what = fct_reorder(what, -ct))
 
 covid_longer_j %>%
@@ -127,7 +130,7 @@ covid_longer_j %>%
   theme(axis.ticks.y.right = element_line(color = "red"),
         axis.title.y.right = element_text(color = "red"),
         axis.text.y.right = element_text(color = "red")) +
-  geom_rug(data = casualties %>% filter(ct < max(covid_longer_j$deaths)), 
+  geom_rug(data = casualties %>% filter(ct < 3*max(covid_longer_j$deaths)), 
            aes(y=ct*10, color = what), sides="r") +
   scale_color_few(palette = "Dark", "Other\nCasualties")
 
