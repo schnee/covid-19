@@ -74,8 +74,11 @@ events <- tribble(
   ymd("2020-04-01"), "Donald Trump","Did you know I was number one on Facebook? I just found out I’m number one on Facebook",
   ymd("2020-04-03"), "Donald Trump", "I was never involved in a model. But—at least this kind of a model",
   ymd("2020-04-07"), "Donald Trump", "Well, the cases really didn’t build up for a while.",
-  ymd("2020-04-08"), "Donald Trump", "the ratings are through the roof...'Monday Night Football, Bachelor Finale' type numbers"
-) %>% arrange(date) %>% 
+  ymd("2020-04-08"), "Donald Trump", "the ratings are through the roof...'Monday Night Football, Bachelor Finale' type numbers",
+  ymd("2020-04-09"), "Donald Trump", "Wall Street Journal always 'forgets' to mention that the ratings for the...Press Briefings are 'through the roof'"
+  ) 
+
+events <- events %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
          label = str_wrap(label, width = 160))
@@ -133,7 +136,7 @@ covid_longer_j %>%
         axis.title.y.right = element_text(color = "red"),
         axis.text.y.right = element_text(color = "red")) +
   geom_rug(data = casualties %>% filter(ct < 3*max(covid_longer_j$deaths)), 
-           aes(y=ct*10, color = what), sides="r") +
+           aes(y=ct*10, color = what), sides="r", size = 2) +
   scale_color_few(palette = "Dark", "Other\nCasualties")
 
 img_name <- "covid-crazy.png"
