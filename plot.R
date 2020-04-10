@@ -75,7 +75,8 @@ events <- tribble(
   ymd("2020-04-03"), "Donald Trump", "I was never involved in a model. But—at least this kind of a model",
   ymd("2020-04-07"), "Donald Trump", "Well, the cases really didn’t build up for a while.",
   ymd("2020-04-08"), "Donald Trump", "the ratings are through the roof...'Monday Night Football, Bachelor Finale' type numbers",
-  ymd("2020-04-09"), "Donald Trump", "Wall Street Journal always 'forgets' to mention that the ratings for the...Press Briefings are 'through the roof'"
+  ymd("2020-04-09"), "Donald Trump", "Wall Street Journal always 'forgets' to mention that the ratings for the...Press Briefings are 'through the roof'",
+  ymd("2020-04-10"), "Donald Trump", "we had the biggest Stock Market increase since 1974"
   ) 
 
 events <- events %>% arrange(date) %>% 
