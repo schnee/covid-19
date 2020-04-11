@@ -3,6 +3,7 @@ library(googledrive)
 library(lubridate)
 library(ggrepel)
 library(ggthemes)
+library(hrbrthemes)
 library(forcats)
 
 filter_pivot <- function(tib){
@@ -134,7 +135,7 @@ covid_longer_j %>%
                    ylim = c(100, max(covid_case_longer$infections)),
                    show.legend = FALSE) +
   scale_fill_manual(values = c(rep(rose_colored_glasses, the_most), rep("white", nrow(levels) - the_most ))) +
-  theme_few() +
+  theme_ipsum(grid = FALSE) +
   theme(axis.ticks.y.right = element_line(color = "red"),
         axis.title.y.right = element_text(color = "red"),
         axis.text.y.right = element_text(color = "red")) +
