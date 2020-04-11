@@ -72,11 +72,13 @@ events <- tribble(
   ymd("2020-03-29"), "Donald Trump", "If we have between 100k and 200k deaths, we've altogether done a very good job",
   ymd("2020-03-31"), "Mitch McConnell", "it diverted the attention of the government because everything every day was all about impeachment",
   ymd("2020-04-01"), "Donald Trump","Did you know I was number one on Facebook? I just found out I’m number one on Facebook",
+  ymd("2020-04-02"), "Jared Kushner", "It's supposed to be our stockpile. It's not supposed to be states' stockpiles",
   ymd("2020-04-03"), "Donald Trump", "I was never involved in a model. But—at least this kind of a model",
   ymd("2020-04-07"), "Donald Trump", "Well, the cases really didn’t build up for a while.",
   ymd("2020-04-08"), "Donald Trump", "the ratings are through the roof...'Monday Night Football, Bachelor Finale' type numbers",
   ymd("2020-04-09"), "Donald Trump", "Wall Street Journal always 'forgets' to mention that the ratings for the...Press Briefings are 'through the roof'",
-  ymd("2020-04-10"), "Donald Trump", "we had the biggest Stock Market increase since 1974"
+  ymd("2020-04-10"), "Donald Trump", "we had the biggest Stock Market increase since 1974",
+  ymd("2020-04-10"), "Donald Trump", "the germ has gotten so brilliant that the antibiotic can’t keep up with it"
   ) 
 
 events <- events %>% arrange(date) %>% 
