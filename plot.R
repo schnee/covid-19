@@ -118,7 +118,8 @@ covid_longer_j %>%
   #scale_y_log10() +
   labs(
     title = "COVID-19 US Cases",
-    subtitle = paste("Current Infections:",max(covid_longer_j$infections), "Casualties:", max(covid_longer_j$deaths)),
+    subtitle = paste("Infections:",scales::label_comma()(max(covid_longer_j$infections)), 
+                     "Casualties:", scales::label_comma()(max(covid_longer_j$deaths))),
     y = "Infections",
     x = "Date",
     caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets\n",
