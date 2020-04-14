@@ -44,6 +44,7 @@ events <- tribble(
   ymd("2020-02-26"), "Donald Trump", "we're going to be pretty soon at only five people",
   ymd("2020-02-28"), "Tucker Carslon", "warns viewers",
   ymd("2020-02-28"), "Tucker Carslon", "warns social and economic",
+  ymd("2020-02-28"), "Donald Trump", "this [COVID-19] is their [the Democrats] new hoax",
   ymd("2020-03-06"), "Marc Siegel", "worst case scenario — it could be the flu",
   ymd("2020-03-07"), "Jeanine Pirro", "more deadly [than the flu] doesn’t reflect reality",
   ymd("2020-03-08"), "Ted Cruz", "Everyone should continue to treat this outbreak seriously",
@@ -76,6 +77,7 @@ events <- tribble(
   ymd("2020-04-02"), "Jared Kushner", "It's supposed to be our stockpile. It's not supposed to be states' stockpiles",
   ymd("2020-04-03"), "Donald Trump", "I was never involved in a model. But—at least this kind of a model",
   ymd("2020-04-07"), "Donald Trump", "Well, the cases really didn’t build up for a while.",
+  ymd("2020-04-07"), "Donald Trump", "the failed H1N1 Swine Flu debacle where 17,000 people died", 
   ymd("2020-04-08"), "Donald Trump", "the ratings are through the roof...'Monday Night Football, Bachelor Finale' type numbers",
   ymd("2020-04-09"), "Donald Trump", "Wall Street Journal always 'forgets' to mention that the ratings for the...Press Briefings are 'through the roof'",
   ymd("2020-04-10"), "Donald Trump", "we had the biggest Stock Market increase since 1974",
@@ -152,3 +154,13 @@ cc <- drive_find(pattern = "covid_img", n_max = 10)
 if(nrow(cc) == 1) {
   drive_put(img_name, path = as_id(cc$id), img_name)
 }
+
+
+covid_longer_j %>% ungroup() %>% arrange(date) %>% 
+  mutate(delta_casualty = deaths - lag(deaths),
+         delta_infection = infections - lag(infections)) %>% 
+  select(date, delta_casualty, delta_infection) %>%
+  pivot_longer(cols = -date, names_to = 'type', values_to = 'ct') %>%
+  ggplot(aes(x=date, y=ct, color = type)) + geom_line() +
+  scale_y_log10() +
+  theme_ipsum()
