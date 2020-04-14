@@ -84,7 +84,7 @@ events <- tribble(
   ymd("2020-04-10"), "Donald Trump", "the germ has gotten so brilliant that the antibiotic can’t keep up with it"
   ) 
 
-events <- events %>% arrange(date) %>% 
+events <- events %>% arrange(who,date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
          label = str_wrap(label, width = 160))
