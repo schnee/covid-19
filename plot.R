@@ -82,7 +82,8 @@ events <- tribble(
   ymd("2020-04-09"), "Donald Trump", "Wall Street Journal always 'forgets' to mention that the ratings for the...Press Briefings are 'through the roof'",
   ymd("2020-04-10"), "Donald Trump", "we had the biggest Stock Market increase since 1974",
   ymd("2020-04-10"), "Donald Trump", "the germ has gotten so brilliant that the antibiotic can’t keep up with it",
-  ymd("2020-04-13"), "Donald Trump", "When somebody's the President of the United States, the authority is total"
+  ymd("2020-04-13"), "Donald Trump", "When somebody's the President of the United States, the authority is total",
+  ymd("2020-04-15"), "Kellyanne Conway", "This is COVID-19, not COVID-1 folks, and so you would think the [WHO] would be on top of that"
   ) 
 
 events <- events %>% arrange(who,date) %>% 
