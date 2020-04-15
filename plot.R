@@ -81,7 +81,8 @@ events <- tribble(
   ymd("2020-04-08"), "Donald Trump", "the ratings are through the roof...'Monday Night Football, Bachelor Finale' type numbers",
   ymd("2020-04-09"), "Donald Trump", "Wall Street Journal always 'forgets' to mention that the ratings for the...Press Briefings are 'through the roof'",
   ymd("2020-04-10"), "Donald Trump", "we had the biggest Stock Market increase since 1974",
-  ymd("2020-04-10"), "Donald Trump", "the germ has gotten so brilliant that the antibiotic can’t keep up with it"
+  ymd("2020-04-10"), "Donald Trump", "the germ has gotten so brilliant that the antibiotic can’t keep up with it",
+  ymd("2020-04-13"), "Donald Trump", "When somebody's the President of the United States, the authority is total"
   ) 
 
 events <- events %>% arrange(who,date) %>% 
@@ -158,7 +159,7 @@ if(nrow(cc) == 1) {
 
 covid_longer_j %>% ungroup() %>% arrange(date) %>% 
   mutate(delta_casualty = deaths - lag(deaths),
-         delta_infection = infections - lag(infections)) %>% 
+         delta_infection = infections - lag(infections)) %>%
   select(date, delta_casualty, delta_infection) %>%
   pivot_longer(cols = -date, names_to = 'type', values_to = 'ct') %>%
   ggplot(aes(x=date, y=ct, color = type)) + geom_line() +
