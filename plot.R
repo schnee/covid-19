@@ -30,61 +30,7 @@ covid_death_longer <- filter_pivot(covid_death) %>%
 covid_longer_j <- covid_case_longer %>% 
   left_join(covid_death_longer)
 
-# TODO move this data to google sheet
-events <- tribble(
-  ~date, ~who, ~desc,
-  ymd("2020-01-22"), "Donald Trump","totally under control",
-  ymd("2020-02-02"), "Donald Trump", "We pretty much shut it down",
-  ymd("2020-02-05"), "Alex Azar", "didn't need additional [emergency] funding", 
-  ymd("2020-01-30"), "Donald Trump", "we have it very well under control",
-  ymd("2020-02-29"), "Donald Trump", "Everything is really under control",
-  ymd("2020-03-13"), "", "US Declares Natl Emergency",
-  ymd("2020-02-25"), "Donald Trump","is very well under control in our country",
-  ymd("2020-02-25"), "Rush Limbaugh", "well under control",
-  ymd("2020-02-26"), "Donald Trump", "we're going to be pretty soon at only five people",
-  ymd("2020-02-28"), "Tucker Carslon", "warns viewers",
-  ymd("2020-02-28"), "Tucker Carslon", "warns social and economic",
-  ymd("2020-02-28"), "Donald Trump", "this [COVID-19] is their [the Democrats] new hoax",
-  ymd("2020-03-06"), "Marc Siegel", "worst case scenario — it could be the flu",
-  ymd("2020-03-07"), "Jeanine Pirro", "more deadly [than the flu] doesn’t reflect reality",
-  ymd("2020-03-08"), "Ted Cruz", "Everyone should continue to treat this outbreak seriously",
-  ymd("2020-03-09"), "Trish Regan", "impeachment scam",
-  ymd("2020-03-09"), "Sean Hannity", "let's bludgeon Trump with this new hoax",
-  ymd("2020-03-11"), "Matt Schlapp", "hard to get",
-  ymd("2020-03-13"), "Sean Hannity", "slim to no chance of contracting",
-  ymd("2020-03-13"), "Laura Ingraham", "great time to fly",
-  ymd("2020-03-13"), "Donald Trump", "I don't take responsibility at all",
-  ymd("2020-03-14"), "Chip Roy", "...free toilet paper for all",
-  ymd("2020-03-15"), "Donald Trump", "Have tremendous control over",
-  ymd("2020-03-03"), "Jesse Waters", "downplays",
-  ymd("2020-03-16"), "Donald Trump", "Chinese Virus",
-  ymd("2020-03-18"), "John Cornyn", "China is to blame...eats bats and snakes and dogs",
-  ymd("2020-03-19"), "Mary Colbert", "in China,...eating bats and snakes...unclean animal",
-  ymd("2020-03-19"), "Donald Trump", "could have been stopped ... [if known about it earlier]",
-  ymd("2020-03-20"), "Donald Trump", "Coming together is much harder when we have dishonest journalists",
-  ymd("2020-03-20"), "Donald Trump","there is a very low incidence of death",
-  ymd("2020-03-22"), "Steve Mnuchin", "Nobody expected this to take off at the rate it did",
-  ymd("2020-03-22"), "John Cornyn", "Blah Blah Blah",
-  ymd("2020-03-24"), "Kathaleen Wall", "#COVID19 will save more lives this week than it takes!",
-  ymd("2020-03-26"), "Donald Trump", "I don't believe you need 40000 or 30000 ventilators",
-  ymd("2020-03-27"), "Donald Trump", "I'm not sure anybody even knows what [the coronavirus] is",
-  ymd("2020-03-27"), "Donald Trump", "none of [the former Presidents] ever thought a thing like this could happen",
-  ymd("2020-03-27"), "Rush Limbaugh", "We didn't elect a president to defer to a bunch of health experts that we don't know",
-  ymd("2020-03-29"), "Donald Trump", "the \'Ratings\' of my News Conferences etc. are so high, \'Bachelor finale, Monday Night Football type numbers\'",
-  ymd("2020-03-29"), "Donald Trump", "If we have between 100k and 200k deaths, we've altogether done a very good job",
-  ymd("2020-03-31"), "Mitch McConnell", "it diverted the attention of the government because everything every day was all about impeachment",
-  ymd("2020-04-01"), "Donald Trump","Did you know I was number one on Facebook? I just found out I’m number one on Facebook",
-  ymd("2020-04-02"), "Jared Kushner", "It's supposed to be our stockpile. It's not supposed to be states' stockpiles",
-  ymd("2020-04-03"), "Donald Trump", "I was never involved in a model. But—at least this kind of a model",
-  ymd("2020-04-07"), "Donald Trump", "Well, the cases really didn’t build up for a while.",
-  ymd("2020-04-07"), "Donald Trump", "the failed H1N1 Swine Flu debacle where 17,000 people died", 
-  ymd("2020-04-08"), "Donald Trump", "the ratings are through the roof...'Monday Night Football, Bachelor Finale' type numbers",
-  ymd("2020-04-09"), "Donald Trump", "Wall Street Journal always 'forgets' to mention that the ratings for the...Press Briefings are 'through the roof'",
-  ymd("2020-04-10"), "Donald Trump", "we had the biggest Stock Market increase since 1974",
-  ymd("2020-04-10"), "Donald Trump", "the germ has gotten so brilliant that the antibiotic can’t keep up with it",
-  ymd("2020-04-13"), "Donald Trump", "When somebody's the President of the United States, the authority is total",
-  ymd("2020-04-15"), "Kellyanne Conway", "This is COVID-19, not COVID-1 folks, and so you would think the [WHO] would be on top of that"
-  ) 
+events <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTt1di48F1DAjek8K95-spPQIJDxvmJFKuPP9tZYmzJMSA6zwKMqfB14CA-1BT42dk6rRyDhH_hKDEM/pub?gid=1160102752&single=true&output=csv")
 
 events <- events %>% arrange(who,date) %>% 
   left_join(covid_case_longer) %>% 
