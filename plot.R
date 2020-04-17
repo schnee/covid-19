@@ -35,7 +35,9 @@ events <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTt1di48F1DA
 events <- events %>% arrange(who,date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
-         label = str_wrap(label, width = 160))
+         lbl_len= str_length(label)) %>%  
+  rowwise() %>%
+  mutate(label = if_else(lbl_len > 100, str_wrap(label, width = lbl_len / 3), label))
 
 levels <- events %>% group_by(who) %>% tally() %>% arrange(desc(n))
 
@@ -78,9 +80,10 @@ covid_longer_j %>%
   geom_label_repel(data = events,
                    aes(x=date, y=infections, label = label, fill = who),
                    arrow = NULL, 
-                   force = 1,
-                   direction="y", 
-                   hjust = 1, size = 3.3,
+                   force = 10,
+                   max.iter = 50000,
+                   direction="both", 
+                   hjust = 1, size = 3,
                    box.padding = 1,
                    xlim = c(min(covid_case_longer$date), today() - days(30)),
                    ylim = c(100, max(covid_case_longer$infections)),
