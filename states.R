@@ -43,7 +43,7 @@ p <- ggplot(data = states,
 
 p + geom_polygon(color = "gray", size = 0.1) +
   coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
-  scale_fill_manual(values = c(ipsum_pal()(length(unique_assocs)), "#bb0000")) +
+  scale_fill_manual(values = c(ipsum_pal()(length(unique_assocs)), "#f08080")) +
   labs(
     title = "COVID-19 Regional Response Associations"
   )+
