@@ -32,7 +32,7 @@ covid_longer_j <- covid_case_longer %>%
 
 events <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTt1di48F1DAjek8K95-spPQIJDxvmJFKuPP9tZYmzJMSA6zwKMqfB14CA-1BT42dk6rRyDhH_hKDEM/pub?gid=1160102752&single=true&output=csv")
 
-events <- events %>% arrange(who,date) %>% 
+events <- events %>% arrange(date) %>% 
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
          lbl_len= str_length(label)) %>%  
@@ -114,4 +114,5 @@ covid_longer_j %>% ungroup() %>% arrange(date) %>%
   pivot_longer(cols = -date, names_to = 'type', values_to = 'ct') %>%
   ggplot(aes(x=date, y=ct, color = type)) + geom_line() +
   scale_y_log10() +
-  theme_ipsum()
+  theme_ipsum() +
+  scale_color_ipsum()
