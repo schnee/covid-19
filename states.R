@@ -23,7 +23,10 @@ assocs <- tribble(
   "massachusetts", "northeast",
   "maryland", "midatlantic",
   "virginia", "midatlantic",
-  "district of columbia", "midatlantic"
+  "district of columbia", "midatlantic",
+  "vermont", "new new england",
+  "new hampshire", "new new england",
+  "maine", "new new england"
 )
 
 unique_assocs <- assocs %>% distinct(association) %>% arrange(association) %>% pull(association)
@@ -43,7 +46,7 @@ p <- ggplot(data = states,
 
 p + geom_polygon(color = "gray", size = 0.1) +
   coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
-  scale_fill_manual(values = c(ipsum_pal()(length(unique_assocs)), "#f08080")) +
+  scale_fill_manual(values = c(ipsum_pal()(length(unique_assocs)), "#dddddd")) +
   labs(
     title = "COVID-19 Regional Response Associations"
   )+

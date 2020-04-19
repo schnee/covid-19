@@ -83,7 +83,7 @@ covid_longer_j %>%
                    force = 10,
                    max.iter = 50000,
                    direction="both", 
-                   hjust = 1, size = 3,
+                   hjust = 1, size = 2.5,
                    box.padding = 1,
                    xlim = c(min(covid_case_longer$date), today() - days(30)),
                    ylim = c(100, max(covid_case_longer$infections)),
@@ -112,7 +112,10 @@ covid_longer_j %>% ungroup() %>% arrange(date) %>%
          delta_infection = infections - lag(infections)) %>%
   select(date, delta_casualty, delta_infection) %>%
   pivot_longer(cols = -date, names_to = 'type', values_to = 'ct') %>%
-  ggplot(aes(x=date, y=ct, color = type)) + geom_line() +
+  ggplot(aes(x=date, y=ct, color = type)) + geom_line(size=1.5) +
   scale_y_log10() +
   theme_ipsum() +
-  scale_color_ipsum()
+  scale_color_ipsum() +
+  labs(
+    title = "US COVID-19 Cases"
+  )
