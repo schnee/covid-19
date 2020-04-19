@@ -52,3 +52,5 @@ p + geom_polygon(color = "gray", size = 0.1) +
   )+
   theme_void() 
 
+dpi <- 150
+ggsave("states-covid-fark.png", width = 850/dpi, height = 679/dpi, dpi = dpi)
