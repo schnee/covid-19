@@ -50,7 +50,9 @@ p + geom_polygon(color = "gray", size = 0.1) +
   labs(
     title = "COVID-19 Regional Response Associations"
   )+
-  theme_void() 
+  theme_void() + 
+  theme(legend.position = "bottom",
+        legend.title = element_blank())
 
-dpi <- 150
+dpi <- 200
 ggsave("states-covid-fark.png", width = 850/dpi, height = 679/dpi, dpi = dpi)
