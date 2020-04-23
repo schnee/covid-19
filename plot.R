@@ -79,13 +79,14 @@ covid_longer_j %>%
   ) + 
   geom_label_repel(data = events,
                    aes(x=date, y=infections, label = label, fill = who),
+                   alpha = 0.85,
                    arrow = NULL, 
                    force = 10,
                    max.iter = 50000,
                    direction="both", 
                    hjust = 1, size = 2.5,
                    box.padding = 1,
-                   xlim = c(min(covid_case_longer$date), today() - days(30)),
+                   xlim = c(min(covid_case_longer$date), today() - days(20)),
                    ylim = c(100, max(covid_case_longer$infections)),
                    show.legend = FALSE) +
   scale_fill_manual(values = c(rep(rose_colored_glasses, the_most), rep("white", nrow(levels) - the_most ))) +
