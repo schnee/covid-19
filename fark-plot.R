@@ -16,7 +16,7 @@ covid_longer_j %>%
                      today())
   ) + 
   theme_ipsum(grid = FALSE) +
-  theme(axis.ticks.y.right = element_line(color = "red"),
+  theme(axis.ticks.y.right = element_blank(),
         axis.title.y.right = element_text(color = "red"),
         axis.text.y.right = element_text(color = "red")) +
   geom_rug(data = casualties %>% filter(ct < 3*max(covid_longer_j$deaths)), 
