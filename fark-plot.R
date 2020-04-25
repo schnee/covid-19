@@ -12,7 +12,7 @@ covid_longer_j %>%
                      "Casualties:", scales::label_comma()(max(covid_longer_j$deaths))),
     y = "Infections",
     x = "Date",
-    caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets\n",
+    caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\n",
                      today())
   ) + 
   theme_ipsum(grid = FALSE) +
