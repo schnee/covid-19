@@ -21,7 +21,7 @@ covid_longer_j %>%
         axis.text.y.right = element_text(color = "red")) +
   geom_rug(data = casualties %>% filter(ct < 3*max(covid_longer_j$deaths)), 
            aes(y=ct*10, color = what), sides="r", size = 1) +
-  scale_color_few(palette = "Dark", "Other\nCasualties") +
+  scale_color_few(palette = "Dark", "Benchmark\nCasualties") +
   theme(legend.position = "bottom")
 
 library(Cairo)
