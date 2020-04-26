@@ -5,6 +5,7 @@ library(ggrepel)
 library(ggthemes)
 library(hrbrthemes)
 library(forcats)
+library(Cairo)
 
 filter_pivot <- function(tib){
   tib <- tib %>% filter(`Country/Region` == "US") %>% 
@@ -91,7 +92,7 @@ covid_longer_j %>%
                    show.legend = FALSE) +
   scale_fill_manual(values = c(rep(rose_colored_glasses, the_most), rep("white", nrow(levels) - the_most ))) +
   theme_ipsum(grid = FALSE) +
-  theme(axis.ticks.y.right = element_line(color = "red"),
+  theme(axis.ticks.y.right = element_blank(),
         axis.title.y.right = element_text(color = "red"),
         axis.text.y.right = element_text(color = "red")) +
   geom_rug(data = casualties %>% filter(ct < 3*max(covid_longer_j$deaths)), 
@@ -99,7 +100,9 @@ covid_longer_j %>%
   scale_color_few(palette = "Dark", "Other\nCasualties")
 
 img_name <- "covid-crazy.png"
-ggsave(img_name, width = 16, height=9, dpi = 100)
+ggsave(img_name, width = 16, height=9, dpi = 100, type = "cairo")
+
+drive_auth(email= "schneeman@gmail.com")
 
 cc <- drive_find(pattern = "covid_img", n_max = 10)
 
