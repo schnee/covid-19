@@ -97,7 +97,7 @@ covid_longer_j %>%
         axis.text.y.right = element_text(color = "red")) +
   geom_rug(data = casualties %>% filter(ct < 3*max(covid_longer_j$deaths)), 
            aes(y=ct*10, color = what), sides="r", size = 2) +
-  scale_color_few(palette = "Dark", "Other\nCasualties")
+  scale_color_few(palette = "Dark", "Reference\nCasualties")
 
 img_name <- "covid-crazy.png"
 ggsave(img_name, width = 16, height=9, dpi = 100, type = "cairo")
