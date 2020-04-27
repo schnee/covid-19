@@ -1,12 +1,16 @@
 
 library(urbnmapr)
 library(tidyverse)
+library(Cairo)
+library(hrbrthemes)
 
 assocs <- tribble(
   ~region, ~association,
   "california", "pacific",
   "washington", "pacific",
   "oregon", "pacific",
+  "nevada", "pacific",
+  "colorado", "pacific",
   "illinois", "great lakes", 
   "michigan", "great lakes",
   "ohio", "great lakes",
@@ -55,4 +59,4 @@ p + geom_polygon(color = "gray", size = 0.1) +
         legend.title = element_blank())
 
 dpi <- 200
-ggsave("states-covid-fark.png", width = 850/dpi, height = 679/dpi, dpi = dpi)
+ggsave("states-covid-fark.png", width = 850/dpi, height = 679/dpi, dpi = dpi, type = "cairo")
