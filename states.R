@@ -30,7 +30,13 @@ assocs <- tribble(
   "district of columbia", "midatlantic",
   "vermont", "new new england",
   "new hampshire", "new new england",
-  "maine", "new new england"
+  "maine", "new new england",
+  "florida", "new new south",
+  "georgia", "new new south",
+  "south carolina", "new new south",
+  "tennessee", "new new south",
+  "alabama", "new new south",
+  "mississippi", "new new south"
 )
 
 unique_assocs <- assocs %>% distinct(association) %>% arrange(association) %>% pull(association)
