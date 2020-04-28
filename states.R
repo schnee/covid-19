@@ -36,7 +36,12 @@ assocs <- tribble(
   "south carolina", "new new south",
   "tennessee", "new new south",
   "alabama", "new new south",
-  "mississippi", "new new south"
+  "mississippi", "new new south",
+  "north dakota", "north plains",
+  "south dakota", "north plains",
+  "wyoming", "north plains",
+  "nebraska", "north plains",
+  "iowa", "north plains"
 )
 
 unique_assocs <- assocs %>% distinct(association) %>% arrange(association) %>% pull(association)
@@ -58,7 +63,7 @@ p + geom_polygon(color = "gray", size = 0.1) +
   coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
   scale_fill_manual(values = c(ipsum_pal()(length(unique_assocs)), "#dddddd")) +
   labs(
-    title = "COVID-19 Regional Response Associations"
+    title = "COVID-19 Regional Response Blocs"
   )+
   theme_void() + 
   theme(legend.position = "bottom",
