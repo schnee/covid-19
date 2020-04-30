@@ -38,7 +38,7 @@ events <- events %>% arrange(date) %>%
   mutate(label = paste(who, desc, sep=": "),
          lbl_len= str_length(label)) %>%  
   rowwise() %>%
-  mutate(label = if_else(lbl_len > 100, str_wrap(label, width = lbl_len / 3), label))
+  mutate(label = if_else(lbl_len > 60, str_wrap(label, width = lbl_len / 3), label))
 
 levels <- events %>% group_by(who) %>% tally() %>% arrange(desc(n))
 
