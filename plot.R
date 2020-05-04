@@ -33,7 +33,7 @@ covid_longer_j <- covid_case_longer %>%
 
 events <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTt1di48F1DAjek8K95-spPQIJDxvmJFKuPP9tZYmzJMSA6zwKMqfB14CA-1BT42dk6rRyDhH_hKDEM/pub?gid=1160102752&single=true&output=csv")
 
-events <- events %>% arrange(date) %>% 
+events <- events %>% arrange(date) %>% filter(who == "Donald Trump") %>%
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
          lbl_len= str_length(label)) %>%  
@@ -61,7 +61,7 @@ casualties <- tribble(
   "H1N1-2009", 12469
 ) %>% mutate(what = fct_reorder(what, -ct))
 
-covid_longer_j %>%
+covid_longer_j %>% 
   ggplot() + 
   geom_col(aes(x=date, y=infections), width=1) +
   geom_area(aes(x=date, y=deaths*10), fill = "red", alpha = 0.75, position = position_nudge((x=0.5))) +
