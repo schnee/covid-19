@@ -27,11 +27,6 @@ pred_on_week <- function(cutoff_date, cd_orig) {
   
   num_grid = seq(from=min(the_range) , to = max(the_range)+30)
   
-  new_df <- data.frame(
-    #delta_casualty = NA,
-    date_num = c(cd$date_num, as.numeric(new_dates))
-  )
-  
   preds <- predict(mod, newdata=list(date_num = num_grid))
   
   tibble(
