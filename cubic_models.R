@@ -76,7 +76,7 @@ ggplot(preds) +
   labs(
     title = "Backtesting cubic models over time",
     subtitle = "COVID-19 Casualties",
-    caption = paste("Each model trained with actual data on or before model date",
+    caption = paste("Each model trained with data available on date",
                     "https://github.com/schnee/covid-19/blob/master/cubic_models.R",
                     sep="\n"),
     y = "Casualties per day"
