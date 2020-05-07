@@ -1,4 +1,6 @@
 library(tidyverse)
+library(lubridate)
+library(hrbrthemes)
 
 # transforms JHU data from wide to long, and just use the US numbers
 filter_pivot <- function(tib){
