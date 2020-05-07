@@ -80,4 +80,4 @@ ggplot(preds) +
                     "https://github.com/schnee/covid-19/blob/master/cubic_models.R",
                     sep="\n"),
     y = "Casualties per day"
-  ) + ylim(0,5000)
+  ) + ylim(0,2*max(cd_orig$delta_casualty, na.rm=TRUE))
