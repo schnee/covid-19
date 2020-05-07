@@ -1,4 +1,6 @@
 library(tidyverse)
+library(lubridate)
+library(hrbrthemes)
 
 filter_pivot <- function(tib){
   tib <- tib %>% filter(`Country/Region` == "US") %>% 
