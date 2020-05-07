@@ -67,7 +67,7 @@ preds <- the_weeks %>% map_dfr(pred_on_week,cd_orig)
 # plot
 ggplot(preds) + 
   geom_line(aes(x=date, y=prediction, color=data_date, group=data_date), size=1.1) +
-  geom_line(data = cd_orig, aes(x=date, y=delta_casualty), size=2) +
+  geom_line(data = cd_orig, aes(x=date, y=delta_casualty), size=2, color="black") +
   scale_color_ipsum("Maximum data date\nto build model") +
   theme_ipsum() +
   labs(
