@@ -33,7 +33,7 @@ covid_longer_j <- covid_case_longer %>%
 
 events <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTt1di48F1DAjek8K95-spPQIJDxvmJFKuPP9tZYmzJMSA6zwKMqfB14CA-1BT42dk6rRyDhH_hKDEM/pub?gid=1160102752&single=true&output=csv")
 
-events <- events %>% arrange(date) %>% filter(who == "Donald Trump") %>%
+events <- events %>% arrange(date) %>% #filter(who == "Donald Trump") %>%
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
          lbl_len= str_length(label)) %>%  
@@ -78,7 +78,7 @@ covid_longer_j %>%
     caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets\n",
                      today())
   ) + 
-  geom_label_repel(data = events,
+  geom_label_repel(data = events %>% filter(date <= max(clj$date)),
                    aes(x=date, y=infections, label = label, fill = who),
                    alpha = 0.85,
                    arrow = NULL, 
