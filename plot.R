@@ -78,7 +78,7 @@ covid_longer_j %>%
     caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets\n",
                      today())
   ) + 
-  geom_label_repel(data = events %>% filter(date <= max(clj$date)),
+  geom_label_repel(data = events %>% filter(date <= max(covid_longer_j$date)),
                    aes(x=date, y=infections, label = label, fill = who),
                    alpha = 0.85,
                    arrow = NULL, 
