@@ -1,6 +1,8 @@
 library(tidyverse)
 library(lubridate)
 library(hrbrthemes)
+library(ggthemes)
+library(Cairo)
 
 # transforms JHU data from wide to long, and just use the US numbers
 filter_pivot <- function(tib){
@@ -67,11 +69,13 @@ the_weeks <- seq(floor_date(ymd("2020-03-13"), unit = "week", week_start =1),
 # process
 preds <- the_weeks %>% map_dfr(pred_on_week,cd_orig)
 
+my_pal <- c(ipsum_pal()(9), ggthemes::few_pal("Dark")(8))
+
 # plot
 ggplot(preds) + 
   geom_line(aes(x=date, y=expm1(prediction), color=data_date, group=data_date), size=1.1) +
   geom_line(data = cd_orig, aes(x=date, y=delta_casualty), size=2, alpha=0.5) +
-  scale_color_ipsum("Backtest date\nto build model") +
+  scale_color_manual("Backtest date\nto build model", values = my_pal) +
   theme_ipsum() +
   labs(
     title = "Backtesting cubic models over time",
@@ -81,3 +85,6 @@ ggplot(preds) +
                     sep="\n"),
     y = "Casualties per day"
   ) + ylim(0,2*max(cd_orig$delta_casualty, na.rm=TRUE))
+
+dpi <- 100
+ggsave("cubic-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "cairo")
