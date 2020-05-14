@@ -36,18 +36,12 @@ events <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTt1di48F1DA
 events <- events %>% arrange(date) %>% #filter(who == "Donald Trump") %>%
   left_join(covid_case_longer) %>% 
   mutate(label = paste(who, desc, sep=": "),
-         lbl_len= str_length(label)) %>%  
+         lbl_len= str_length(label),
+         who = fct_lump_n(who, 3)) %>%  
   rowwise() %>%
   mutate(label = if_else(lbl_len > 60, str_wrap(label, width = lbl_len / 3), label))
 
-levels <- events %>% group_by(who) %>% tally() %>% arrange(desc(n))
-
-#color the top 20% of the commentors, just because
-the_most <- levels %>% top_frac(.2, n) %>% nrow()
-
-events <- events %>% mutate(who = fct_infreq(who))
-
-rose_colored_glasses <- "white" ##FF9ECF"
+alphas <- c(0.85, rep(0.5, length(levels(events$who)) -2), 0.2)
 
 casualties <- tribble(
   ~what, ~ct,
@@ -80,8 +74,7 @@ covid_longer_j %>%
                      today())
   ) + 
   geom_label_repel(data = events %>% filter(date <= max(covid_longer_j$date)),
-                   aes(x=date, y=infections, label = label, fill = who),
-                   alpha = 0.85,
+                   aes(x=date, y=infections, label = label, alpha = who),
                    arrow = NULL, 
                    force = 10,
                    max.iter = 50000,
@@ -92,7 +85,7 @@ covid_longer_j %>%
                    xlim = c(min(covid_case_longer$date), today() - days(20)),
                    ylim = c(100, max(covid_case_longer$infections)),
                    show.legend = FALSE) +
-  scale_fill_manual(values = c(rep(rose_colored_glasses, the_most), rep("white", nrow(levels) - the_most ))) +
+  scale_alpha_manual(values = alphas) +
   theme_ipsum(grid = FALSE) +
   theme(axis.ticks.y.right = element_blank(),
         axis.title.y.right = element_text(color = "red"),
