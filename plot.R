@@ -148,7 +148,3 @@ covid_longer_j %>%
 
 dpi <- 100
 ggsave("covid-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "cairo")
-
-
-
-
