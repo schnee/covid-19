@@ -72,7 +72,8 @@ covid_longer_j %>%
   labs(
     title = "COVID-19 US Cases",
     subtitle = paste("Infections:",scales::label_comma()(max(covid_longer_j$infections)), 
-                     "Casualties:", scales::label_comma()(max(covid_longer_j$deaths))),
+                     "Casualties:", scales::label_comma()(max(covid_longer_j$deaths)),
+                     "CFR:", scales::percent_format()(max(covid_longer_j$deaths)/max(covid_longer_j$infections))),
     y = "Infections",
     x = "Date",
     caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets\n",
@@ -136,7 +137,8 @@ covid_longer_j %>%
   labs(
     title = "COVID-19 US Cases",
     subtitle = paste("Infections:",scales::label_comma()(max(covid_longer_j$infections)), 
-                     "Casualties:", scales::label_comma()(max(covid_longer_j$deaths))),
+                     "Casualties:", scales::label_comma()(max(covid_longer_j$deaths)),
+                     "CFR:", scales::percent_format()(max(covid_longer_j$deaths)/max(covid_longer_j$infections))),
     y = "Infections",
     x = "Date",
     caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\n",
