@@ -29,7 +29,8 @@ covid_death_longer <- filter_pivot(covid_death) %>%
   rename(deaths = sum_ct)
 
 covid_longer_j <- covid_case_longer %>% 
-  left_join(covid_death_longer)
+  left_join(covid_death_longer) %>%
+  mutate(cfr = deaths / infections) 
 
 events <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTt1di48F1DAjek8K95-spPQIJDxvmJFKuPP9tZYmzJMSA6zwKMqfB14CA-1BT42dk6rRyDhH_hKDEM/pub?gid=1160102752&single=true&output=csv")
 
@@ -67,7 +68,7 @@ covid_longer_j %>%
     title = "COVID-19 US Cases",
     subtitle = paste("Infections:",scales::label_comma()(max(covid_longer_j$infections)), 
                      "Casualties:", scales::label_comma()(max(covid_longer_j$deaths)),
-                     "CFR:", scales::percent_format()(max(covid_longer_j$deaths)/max(covid_longer_j$infections))),
+                     "CFR:", scales::percent_format()(covid_longer_j %>% pull(cfr) %>% last())),
     y = "Infections",
     x = "Date",
     caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets\n",
@@ -116,8 +117,12 @@ covid_longer_j %>% ungroup() %>% arrange(date) %>%
   theme_ipsum() +
   scale_color_ipsum() +
   labs(
-    title = "US COVID-19 Cases"
+    title = "US COVID-19 Daily Cases"
   )
+
+dpi <- 100
+ggsave("delta-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "cairo")
+
 
 covid_longer_j %>%
   ggplot() + 
@@ -131,7 +136,7 @@ covid_longer_j %>%
     title = "COVID-19 US Cases",
     subtitle = paste("Infections:",scales::label_comma()(max(covid_longer_j$infections)), 
                      "Casualties:", scales::label_comma()(max(covid_longer_j$deaths)),
-                     "CFR:", scales::percent_format()(max(covid_longer_j$deaths)/max(covid_longer_j$infections))),
+                     "CFR:", scales::percent_format()(covid_longer_j %>% pull(cfr) %>% last())),
     y = "Infections",
     x = "Date",
     caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\n",
@@ -149,6 +154,20 @@ covid_longer_j %>%
 dpi <- 100
 ggsave("covid-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "cairo")
 
+covid_longer_j %>%
+  ggplot(aes(x=date, y=cfr)) +
+  geom_point() +
+  scale_y_percent() +
+  labs(
+    title = "COVID-19 US Case Fatality Rate (Observed)",
+    subtitle = paste("Infections:",scales::label_comma()(max(covid_longer_j$infections)), 
+                     "Casualties:", scales::label_comma()(max(covid_longer_j$deaths))),
+    y = "Case Fatality Rate",
+    x = "Date",
+    caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\n",
+                     today())
+  ) + 
+  theme_ipsum(grid = FALSE)
 
-
-
+dpi <- 100
+ggsave("cfr-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "cairo")
