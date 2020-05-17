@@ -113,7 +113,7 @@ covid_longer_j %>% ungroup() %>% arrange(date) %>%
   select(date, delta_casualty, delta_infection) %>%
   pivot_longer(cols = -date, names_to = 'type', values_to = 'ct') %>%
   ggplot(aes(x=date, y=ct, color = type)) + geom_line(size=1.5) +
-  scale_y_log10() +
+  scale_y_log10( labels = scales::label_comma(accuracy = 1)) +
   theme_ipsum() +
   scale_color_ipsum() +
   labs(
