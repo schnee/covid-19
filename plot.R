@@ -28,9 +28,12 @@ covid_case_longer <- filter_pivot(covid) %>%
 covid_death_longer <- filter_pivot(covid_death) %>% 
   rename(deaths = sum_ct)
 
+onset_to_death <- 13
+
 covid_longer_j <- covid_case_longer %>% 
   left_join(covid_death_longer) %>%
-  mutate(cfr = deaths / infections) 
+  mutate(cfr = deaths / infections,
+         cfr_lag = deaths / lag(infections, n=onset_to_death)) 
 
 events <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTt1di48F1DAjek8K95-spPQIJDxvmJFKuPP9tZYmzJMSA6zwKMqfB14CA-1BT42dk6rRyDhH_hKDEM/pub?gid=1160102752&single=true&output=csv")
     
@@ -155,19 +158,20 @@ dpi <- 100
 ggsave("covid-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "cairo")
 
 covid_longer_j %>%
-  ggplot(aes(x=date, y=cfr)) +
-  geom_point() +
-  scale_y_percent() +
+  ggplot(aes(x=date, y=cfr_lag)) +
+  geom_point()  +
   labs(
-    title = "COVID-19 US Case Fatality Rate (Observed)",
-    subtitle = paste("Infections:",scales::label_comma()(max(covid_longer_j$infections)), 
-                     "Casualties:", scales::label_comma()(max(covid_longer_j$deaths))),
+    title = "COVID-19 US Case Fatality Rate",
+    subtitle = paste0(onset_to_death," days onset-to-death lag\n",
+               "Current Infections: ",scales::label_comma()(max(covid_longer_j$infections)), 
+               "\nCurrent Casualties: ", scales::label_comma()(max(covid_longer_j$deaths))),
     y = "Case Fatality Rate",
     x = "Date",
     caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\n",
                      today())
   ) + 
-  theme_ipsum(grid = FALSE)
+  theme_ipsum(grid = FALSE) + 
+  scale_y_percent(limits = c(0,0.2))
 
 dpi <- 100
 ggsave("cfr-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "cairo")
