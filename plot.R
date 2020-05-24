@@ -105,7 +105,7 @@ drive_auth(email= "schneeman@gmail.com")
 
 cc <- drive_find(pattern = "covid_img", n_max = 10)
 
-if(nrow(cc) == 1) {
+if(nrow(cc) < 2) {
   drive_put(img_name, path = as_id(cc$id), img_name)
 }
 
