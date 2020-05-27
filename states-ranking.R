@@ -100,8 +100,8 @@ my_pal <- c(ipsum_pal()(9), few_pal()(8), colorblind_pal()(8))
 
 # and plot the deaths by raw death count
 covid_sla %>%
-  ggplot(aes(x=date, y=mean_7, fill=top_by_deaths)) + geom_area() +
-  theme_ipsum() +
+  ggplot(aes(x=date, y=mean_7, fill=top_by_deaths)) + geom_area(color=NA) +
+  theme_modern_rc() +
   scale_fill_manual("States", values = my_pal) +
   labs(
     title = "COVID-19 Deaths",
@@ -123,8 +123,8 @@ covid_sla <- covid_sl %>%
 
 
 covid_sla %>%
-  ggplot(aes(x=date, y=mean_7, fill=top_by_cases)) + geom_area() +
-  theme_ipsum() +
+  ggplot(aes(x=date, y=mean_7, fill=top_by_cases)) + geom_area(color=NA) +
+  theme_modern_rc() +
   scale_fill_manual("States", values = my_pal) +
   labs(
     title = "COVID-19 Cases",
@@ -181,7 +181,7 @@ sdp100k %>%
             size = 3.5) +
   coord_cartesian(xlim = c(first_death - days(16), 
                            max(sdp100k$date) + days(15))) +
-  theme_ipsum() +
+  theme_modern_rc() +
   theme(
     axis.line.y = element_blank(),
     axis.text.y = element_blank(),
@@ -196,15 +196,18 @@ sdp100k %>%
 dpi <- 100
 ggsave("deaths-ranking.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
+corr <- signif(cor(sdp100k$density, sdp100k$deaths_per_100k), digits = 2)
+
 sdp100k %>%
   filter(date == max(date)) %>%
   filter(state != "District of Columbia") %>% 
   ggplot(aes(x=density, y=deaths_per_100k)) +
   geom_point() +
   geom_smooth(method="lm") +
-  theme_ipsum() +
+  theme_modern_rc() +
   labs(
-    title = "Population Density v Deaths per 100K",
+    title = "Population Density v Deaths per 100K",  
+    subtitle = paste("Correlation:",corr),
     y = "Deaths per 100k",
     x = "Population Density (people per square mile)"
   )
@@ -256,7 +259,7 @@ scp100k %>%
             size = 3.5) +
   coord_cartesian(xlim = c(first_case - days(16), 
                            max(scp100k$date) + days(15))) +
-  theme_ipsum() +
+  theme_modern_rc() +
   theme(
     axis.line.y = element_blank(),
     axis.text.y = element_blank(),
@@ -271,15 +274,18 @@ scp100k %>%
 dpi <- 100
 ggsave("cases-ranking.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
+corr <- signif(cor(scp100k$density, scp100k$cases_per_100k), digits = 2)
+
 scp100k %>%
   filter(date == max(date)) %>%
   filter(state != "District of Columbia") %>% 
   ggplot(aes(x=density, y=cases_per_100k)) +
   geom_point() +
   geom_smooth(method="lm") +
-  theme_ipsum() +
+  theme_modern_rc() +
   labs(
     title = "Population Density v Cases per 100K",
+    subtitle = paste("Correlation:",corr),
     y = "Cases per 100k",
     x = "Population Density (people per square mile)"
   )
