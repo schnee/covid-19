@@ -280,6 +280,6 @@ scp100k %>%
   theme_ipsum() +
   labs(
     title = "Population Density v Cases per 100K",
-    y = "Deaths per 100k",
+    y = "Cases per 100k",
     x = "Population Density (people per square mile)"
   )
