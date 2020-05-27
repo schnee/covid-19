@@ -163,6 +163,8 @@ rhs <- sdp100k %>% filter(date == max(date)) %>%
 #  filter(state %in% lhs$state) %>%
   select(state, ranking, deaths_per_100k)  
   
+# gonna cheat a bit and convert the color aesthetic from state names to 
+# an integer. this allows for use of scale_color_gradient directly.
 sdp100k %>%
   filter(date >= first_death - days(2)) %>%
   filter(state %in% lhs$state) %>% 
@@ -192,7 +194,7 @@ sdp100k %>%
   )
 
 dpi <- 100
-ggsave("ranking.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
+ggsave("deaths-ranking.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
 sdp100k %>%
   filter(date == max(date)) %>%
@@ -210,11 +212,10 @@ sdp100k %>%
 
 
 # get the date of the first case
-
 first_case <- covid_state %>% filter(cases > 0) %>%
   pull(date) %>% min
 
-# get the deaths and the deaths per 100k
+# get the cases and the cases per 100k
 states_cases_per_100k_tib <- covid_state %>%
   select(date, state, cases, cases_per_100k)
 
@@ -223,7 +224,7 @@ dummy <- states_cases_per_100k_tib %>% complete(date, state, fill = list(cases_p
                                                                           cases = 0)) %>%
   left_join(state_pop, by=c("state" = "NAME"))
 
-# join in the actual deaths "on top of" the dummies. This will give us a nice complete 
+# join in the actual cases "on top of" the dummies. This will give us a nice complete 
 # table of all cases
 scp100k <- dummy %>% 
   left_join(states_cases_per_100k_tib) %>%
