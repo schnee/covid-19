@@ -90,7 +90,7 @@ crazy_plot <- covid_longer_j %>%
                    ylim = c(100, max(covid_case_longer$infections)),
                    show.legend = FALSE) +
   scale_alpha_manual(values = alphas) +
-  theme_ipsum(grid = FALSE) +
+  theme_modern_rc(grid = FALSE) +
   theme(axis.ticks.y.right = element_blank(),
         axis.title.y.right = element_text(color = "red"),
         axis.text.y.right = element_text(color = "red")) +
@@ -117,7 +117,7 @@ covid_longer_j %>% ungroup() %>% arrange(date) %>%
   pivot_longer(cols = -date, names_to = 'type', values_to = 'ct') %>%
   ggplot(aes(x=date, y=ct, color = type)) + geom_line(size=1.5) +
   scale_y_log10( labels = scales::label_comma(accuracy = 1)) +
-  theme_ipsum() +
+  theme_modern_rc() +
   scale_color_ipsum() +
   labs(
     title = "US COVID-19 Daily Cases"
@@ -145,7 +145,7 @@ covid_longer_j %>%
     caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\n",
                      today())
   ) + 
-  theme_ipsum(grid = FALSE) +
+  theme_modern_rc(grid = FALSE) +
   theme(axis.ticks.y.right = element_blank(),
         axis.title.y.right = element_text(color = "red"),
         axis.text.y.right = element_text(color = "red")) +
@@ -170,7 +170,7 @@ covid_longer_j %>%
     caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\n",
                      today())
   ) + 
-  theme_ipsum(grid = FALSE) + 
+  theme_modern_rc(grid = FALSE) + 
   scale_y_percent(limits = c(0,0.2))
 
 dpi <- 100
