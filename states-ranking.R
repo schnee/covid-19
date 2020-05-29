@@ -223,8 +223,12 @@ states_cases_per_100k_tib <- covid_state %>%
   select(date, state, cases, cases_per_100k)
 
 # create a dummy table with all states and all dates, filled with zeros
-dummy <- states_cases_per_100k_tib %>% complete(date, state, fill = list(cases_per_100k = 0,
-                                                                          cases = 0)) %>%
+# add in a row that starts before the first case so that the initial
+# ordering is by population density
+dummy <- states_cases_per_100k_tib %>% 
+  bind_rows(tibble(date = min(states_cases_per_100k_tib$date) - days(1))) %>%
+  complete(date, state, fill = list(cases_per_100k = 0,
+                                    cases = 0)) %>%
   left_join(state_pop, by=c("state" = "NAME"))
 
 # join in the actual cases "on top of" the dummies. This will give us a nice complete 
@@ -234,9 +238,10 @@ scp100k <- dummy %>%
   group_by(date) %>%
   arrange(desc(cases_per_100k), desc(density), state) %>%
   mutate(ranking = row_number()) %>%
-  ungroup()
+  ungroup() %>%
+  filter(!is.na(state))
 
-lhs <- scp100k %>% filter(date == first_case) %>% 
+lhs <- scp100k %>% filter(date == min(date)) %>% 
   select(state, ranking, density) 
 
 rhs <- scp100k %>% filter(date == max(date)) %>%
