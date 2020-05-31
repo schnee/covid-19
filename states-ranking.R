@@ -294,3 +294,9 @@ scp100k %>%
     y = "Cases per 100k",
     x = "Population Density (people per square mile)"
   )
+
+
+scp100k %>% group_by(state) %>% arrange(date) %>%
+  mutate(week_ago = lag(ranking,7), delta = lag(ranking, 7)- ranking) %>% 
+  ungroup() %>%
+  filter(date==max(date)) %>% arrange(desc(delta)) %>% view()
