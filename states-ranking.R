@@ -8,7 +8,7 @@ library(Cairo)
 states_to_remove <- c("Guam", "Northern Mariana Islands", "Virgin Islands")
 
 # read from the NY Times state-level covid data, and from the US Census
-# population data, and from some rando for the state areas
+# population data, and from jakevdp's github repo for the state areas
 
 covid_state <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv") %>%
   filter(!state %in% states_to_remove)
