@@ -1,6 +1,21 @@
-states_to_highlight <- scp100k %>% filter(date == min(date),
-                                          ranking >=8,
-                                          ranking <=12) 
+states_to_highlight <- scp100k %>% 
+  filter(date >= ymd("2020-05-01")) %>%
+  group_by(state) %>%
+  mutate(        from_min = abs(min(ranking) - ranking),
+                 from_max = abs(max(ranking) - ranking),
+                 greatest_move = max(c(from_min, from_max)))%>% 
+  ungroup() %>%
+  filter(date == max(date)) %>%
+  top_n(10, greatest_move) %>%
+  select(state) %>% distinct()
+
+centered_state <- lhs %>% 
+  filter(state == "Florida") %>% 
+  pull(ranking)
+
+states_to_highlight <- 
+  lhs %>% filter(ranking >= centered_state -2,
+                 ranking <= centered_state +2) 
 
 scp100k %>%
   #filter(date >= first_case - days(2)) %>%
@@ -32,6 +47,6 @@ scp100k %>%
   )
 
 dpi <- 100
-ggsave("cases-ranking-highlight.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
+ggsave("cases-ranking-highlight.png", width = 1550 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
 
