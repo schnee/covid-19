@@ -172,7 +172,7 @@ sdp100k %>%
   ggplot(aes(y=ranking, group = state)) + 
   geom_line(aes(x=date, color = as.integer(state)), size=1.1) + 
   scale_y_reverse() + 
-  scale_color_gradient(low="green", high="orange")+
+  scale_color_viridis_c(option = "plasma", begin=0.4)+
   geom_text(data = lhs, aes(label=state), x= first_death - days(3),
              hjust = 1,
              size = 3.5) +
@@ -255,7 +255,7 @@ scp100k %>%
   ggplot(aes(y=ranking, group = state)) + 
   geom_line(aes(x=date, color = as.integer(state)), size=1.1) + 
   scale_y_reverse() + 
-  scale_color_gradient(low="green", high="orange")+
+  scale_color_viridis_c(option = "viridis", begin=0.4)+
   geom_text(data = lhs, aes(label=state), x= first_case - days(3),
             hjust = 1,
             size = 3.5) +
