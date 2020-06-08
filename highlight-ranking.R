@@ -9,8 +9,10 @@ states_to_highlight <- scp100k %>%
   top_n(10, greatest_move) %>%
   select(state) %>% distinct()
 
+state_to_highlight <- "Florida"
+
 centered_state <- lhs %>% 
-  filter(state == "Florida") %>% 
+  filter(state == state_to_highlight) %>% 
   pull(ranking)
 
 states_to_highlight <- 
@@ -43,10 +45,13 @@ scp100k %>%
   labs(
     title = "COVID-19 Cases Per 100k population",
     subtitle = "Ordered by {Cases Per 100k, Population Density, State Name} by Day",
+    caption = paste("As of", max(scp100k$date)),
     y = NULL
   )
 
+filename <- paste0("cases-ranking-highlight", state_to_highlight, ".png")
+
 dpi <- 100
-ggsave("cases-ranking-highlight.png", width = 1550 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
+ggsave(filename, width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
 

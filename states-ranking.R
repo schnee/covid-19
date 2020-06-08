@@ -300,3 +300,9 @@ scp100k %>% group_by(state) %>% arrange(date) %>%
   mutate(week_ago = lag(ranking,7), delta = lag(ranking, 7)- ranking) %>% 
   ungroup() %>%
   filter(date==max(date)) %>% arrange(desc(delta)) %>% view()
+
+
+sdp100k %>% group_by(state) %>% arrange(date) %>%
+  mutate(week_ago = lag(ranking,7), delta = lag(ranking, 7)- ranking) %>% 
+  ungroup() %>%
+  filter(date==max(date)) %>% arrange(desc(delta)) %>% view()
