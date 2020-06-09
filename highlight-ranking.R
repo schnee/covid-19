@@ -49,7 +49,7 @@ scp100k %>%
     y = NULL
   )
 
-filename <- paste0("cases-ranking-highlight", state_to_highlight, ".png")
+filename <- paste0("cases-ranking-highlight-", str_to_lower(state_to_highlight), ".png")
 
 dpi <- 100
 ggsave(filename, width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
