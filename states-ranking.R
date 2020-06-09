@@ -106,8 +106,12 @@ covid_sla %>%
   labs(
     title = "COVID-19 Deaths",
     subtitle = "7 day moving average",
-    y = "Count"
+    y = "Count",
+    caption = max(covid_sla$date)
   )
+dpi <- 100
+ggsave("cases-area-7day-ma.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
+
 
 # do everything that we did above for deaths, but for cases
 covid_sl <- covid_state %>%
@@ -129,8 +133,11 @@ covid_sla %>%
   labs(
     title = "COVID-19 Cases",
     subtitle = "7 day moving average",
-    y = "Count"
+    y = "Count",
+    caption = max(covid_sla$date)
   )
+dpi <- 100
+ggsave("cases-area-7day-ma.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
 
 # get the date of the first death
