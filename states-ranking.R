@@ -189,7 +189,8 @@ sdp100k %>%
   ) + 
   labs(
     title = "COVID-19 Deaths Per 100k population",
-    subtitle = "Ordered by {Deaths Per 100k, Population Density, State Name} by Day",
+    subtitle = max(sdp100k$date),
+    caption = "Ordered by {Deaths Per 100k, Population Density, State Name} by Day",
     y = NULL
   )
 
@@ -209,9 +210,13 @@ sdp100k %>%
     title = "Population Density v Deaths per 100K",  
     subtitle = paste("Correlation:",corr),
     y = "Deaths per 100k",
-    x = "Population Density (people per square mile)"
+    x = "Population Density (people per square mile)",
+    caption = max(sdp100k$date)
   )
 
+
+dpi <- 100
+ggsave("deaths-cor.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
 
 # get the date of the first case
@@ -272,7 +277,8 @@ scp100k %>%
   ) + 
   labs(
     title = "COVID-19 Cases Per 100k population",
-    subtitle = "Ordered by {Cases Per 100k, Population Density, State Name} by Day",
+    subtitle = max(scp100k$date),
+    caption = "Ordered by {Cases Per 100k, Population Density, State Name} by Day",
     y = NULL
   )
 
@@ -292,8 +298,14 @@ scp100k %>%
     title = "Population Density v Cases per 100K",
     subtitle = paste("Correlation:",corr),
     y = "Cases per 100k",
-    x = "Population Density (people per square mile)"
+    x = "Population Density (people per square mile)",
+    caption = max(scp100k$date)
   )
+
+dpi <- 100
+ggsave("cases-cor.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
+
+
 
 
 scp100k %>% group_by(state) %>% arrange(date) %>%
