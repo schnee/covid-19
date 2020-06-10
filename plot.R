@@ -71,7 +71,7 @@ crazy_plot <- covid_longer_j %>%
     title = "COVID-19 US Cases",
     subtitle = paste("Infections:",scales::label_comma()(max(covid_longer_j$infections)), 
                      "Casualties:", scales::label_comma()(max(covid_longer_j$deaths)),
-                     "CFR:", scales::percent_format()(covid_longer_j %>% pull(cfr) %>% last())),
+                     "CFR:", scales::percent_format(accuracy = 0.01)(covid_longer_j %>% pull(cfr) %>% last())),
     y = "Infections",
     x = "Date",
     caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\nLabels: media and tweets\n",
@@ -131,16 +131,16 @@ covid_longer_j %>%
   ggplot() + 
   geom_col(aes(x=date, y=infections), width=1) +
   geom_area(aes(x=date, y=deaths*10), fill = "red", alpha = 0.75, position = position_nudge((x=0.5))) +
-  scale_y_continuous(sec.axis = sec_axis(~.*0.1, name = "Casualties", 
+  scale_y_continuous(sec.axis = sec_axis(~.*0.1, name = "Fatalities", 
                                          labels = scales::label_comma()), 
                      labels = scales::label_comma()) +
   #scale_y_log10() +
   labs(
     title = "COVID-19 US Cases",
-    subtitle = paste("Infections:",scales::label_comma()(max(covid_longer_j$infections)), 
-                     "Casualties:", scales::label_comma()(max(covid_longer_j$deaths)),
-                     "CFR:", scales::percent_format()(covid_longer_j %>% pull(cfr) %>% last())),
-    y = "Infections",
+    subtitle = paste("Cases:",scales::label_comma()(max(covid_longer_j$infections)), 
+                     "Fatalities:", scales::label_comma()(max(covid_longer_j$deaths)),
+                     "CFR:", scales::percent_format(accuracy =0.01)(covid_longer_j %>% pull(cfr) %>% last())),
+    y = "Cases",
     x = "Date",
     caption = paste0("Confirmed cases: https://github.com/CSSEGISandData/COVID-19\n",
                      today())
@@ -151,7 +151,7 @@ covid_longer_j %>%
         axis.text.y.right = element_text(color = "red")) +
   geom_rug(data = casualties %>% filter(ct < 3*max(covid_longer_j$deaths)), 
            aes(y=ct*10, color = what), sides="r", size = 1) +
-  scale_color_few(palette = "Dark", "Reference\nCasualties") +
+  scale_color_few(palette = "Dark", "Reference\nFatalities") +
   theme(legend.position = "bottom")
 
 dpi <- 100

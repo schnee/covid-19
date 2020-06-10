@@ -110,7 +110,7 @@ covid_sla %>%
     caption = max(covid_sla$date)
   )
 dpi <- 100
-ggsave("cases-area-7day-ma.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
+ggsave("deaths-area-7day-ma.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
 
 # do everything that we did above for deaths, but for cases
