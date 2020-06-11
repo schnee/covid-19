@@ -126,6 +126,14 @@ covid_longer_j %>% ungroup() %>% arrange(date) %>%
 dpi <- 100
 ggsave("delta-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "cairo")
 
+img_name <- "delta-wide.png"
+ggsave(img_name, width = 16, height = 9, dpi = dpi, type = "cairo")
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) < 2) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}
 
 covid_longer_j %>%
   ggplot() + 
@@ -156,6 +164,15 @@ covid_longer_j %>%
 
 dpi <- 100
 ggsave("covid-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "cairo")
+
+img_name <- "covid-wide.png"
+ggsave(img_name, width = 16, height = 9, dpi = dpi, type = "cairo")
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) < 2) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}
 
 covid_longer_j %>%
   ggplot(aes(x=date, y=cfr_lag)) +

@@ -4,6 +4,9 @@ library(hrbrthemes)
 library(ggthemes)
 library(lubridate)
 library(Cairo)
+library(googledrive)
+
+drive_auth(email= "schneeman@gmail.com")
 
 states_to_remove <- c("Guam", "Northern Mariana Islands", "Virgin Islands")
 
@@ -112,6 +115,15 @@ covid_sla %>%
 dpi <- 100
 ggsave("deaths-area-7day-ma.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
+img_name <- "deaths-area-7day-ma-wide.png"
+ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) < 2) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}
+
 
 # do everything that we did above for deaths, but for cases
 covid_sl <- covid_state %>%
@@ -139,6 +151,14 @@ covid_sla %>%
 dpi <- 100
 ggsave("cases-area-7day-ma.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
+img_name <- "cases-area-7day-ma-wide.png"
+ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) < 2) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}
 
 # get the date of the first death
 
@@ -204,6 +224,16 @@ sdp100k %>%
 dpi <- 100
 ggsave("deaths-ranking.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
+img_name <- "deaths-ranking-wide.png"
+ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) < 2) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}
+
+
 corr <- signif(cor(sdp100k$density, sdp100k$deaths_per_100k), digits = 2)
 
 sdp100k %>%
@@ -224,6 +254,15 @@ sdp100k %>%
 
 dpi <- 100
 ggsave("deaths-cor.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
+
+img_name <- "deaths-cor-wide.png"
+ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) < 2) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}
 
 
 # get the date of the first case
@@ -292,6 +331,16 @@ scp100k %>%
 dpi <- 100
 ggsave("cases-ranking.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
+img_name <- "cases-ranking-wide.png"
+ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) < 2) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}
+
+
 corr <- signif(cor(scp100k$density, scp100k$cases_per_100k), digits = 2)
 
 scp100k %>%
@@ -311,6 +360,15 @@ scp100k %>%
 
 dpi <- 100
 ggsave("cases-cor.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
+
+img_name <- "cases-cor-wide.png"
+ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) < 2) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}
 
 
 
