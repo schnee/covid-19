@@ -3,7 +3,10 @@ library(janitor)
 library(readr)
 library(readxl)
 library(tidyr)
+library(dplyr)
 library(httr)
+library(lubridate)
+library(stringr)
 
 # yay, parse Wikipedia tables - that's sure to be maintenance free....
 
@@ -59,6 +62,7 @@ GET(dshs_hosp_url, write_disk(tf <- tempfile(fileext = ".xlsx", tmpdir="./data")
 tsa_hosp_w <- read_excel(tf, skip = 2)
 unlink(tf)
 
+tsa_hosp_w <- tsa_hosp_w %>% filter(!is.na(`TSA ID`))
 
 # It is a wide data frame, we need to make it long. The way the excel file is
 # formatted confuses read_excel and the column headers that are Dates in excel
@@ -76,5 +80,16 @@ tsa_hosp <- tsa_hosp_w %>%
   mutate(sequence = as.numeric(sequence)) %>%
   mutate(date = as.Date(sequence, origin = "1899-12-30")) %>%
   mutate(tsa_id = str_remove(tsa_id, "[\\W]")) %>%
+  select(-sequence) %>%
   left_join(tsa, by = c("tsa_id" = "tsa"))
+
+# we will need a couple of dates at the beginning of the tsa_hosp frame
+# so that the initial rankings are purely based on population density
+
+dummy <- tsa_hosp %>% 
+  bind_rows(tibble(date = seq(from = min(tsa_hosp$date) - days(2), 
+                              to = min(tsa_hosp$date) - days(1), 
+                              by = "day"))) %>%
+  complete(date, nesting(tsa_id, tsa_name), fill = list(hosp_ct = 0)) %>%
+  left_join(tsa, by=c("tsa_id" = "tsa"))
 
