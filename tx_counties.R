@@ -7,6 +7,11 @@ library(dplyr)
 library(httr)
 library(lubridate)
 library(stringr)
+library(ggplot2)
+library(hrbrthemes)
+library(googledrive)
+
+drive_auth(email= "schneeman@gmail.com")
 
 # yay, parse Wikipedia tables - that's sure to be maintenance free....
 
@@ -86,10 +91,73 @@ tsa_hosp <- tsa_hosp_w %>%
 # we will need a couple of dates at the beginning of the tsa_hosp frame
 # so that the initial rankings are purely based on population density
 
-dummy <- tsa_hosp %>% 
+tsa_pad <- tsa_hosp %>% 
   bind_rows(tibble(date = seq(from = min(tsa_hosp$date) - days(2), 
                               to = min(tsa_hosp$date) - days(1), 
                               by = "day"))) %>%
   complete(date, nesting(tsa_id, tsa_name), fill = list(hosp_ct = 0)) %>%
-  left_join(tsa, by=c("tsa_id" = "tsa"))
+  select(date, tsa_id, tsa_name, hosp_ct) %>%
+  filter(!is.na(tsa_id)) %>%
+  left_join(tsa, by=c("tsa_id" = "tsa")) %>%
+  group_by(date) %>%
+  mutate(hosp_per_100k = hosp_ct / (population / 1e5)) %>%
+  arrange(desc(hosp_per_100k), desc(pop_density), tsa_id) %>%
+  mutate(ranking = row_number()) %>%
+  ungroup() %>%
+  arrange(date, tsa_id)
 
+lhs <- tsa_pad %>% filter(date == min(date)) %>%
+  arrange(ranking)
+
+rhs <- tsa_pad %>% filter(date == max(date)) %>% 
+  arrange(ranking)
+
+tsa_pad %>% 
+  mutate(tsa_name = factor(tsa_name, levels = lhs$tsa_name)) %>%
+  ggplot(aes(x=date, y=ranking)) + 
+  geom_line(aes(color=tsa_name), size=1.1) +
+  scale_y_reverse() +
+  scale_color_viridis_d(option = "plasma", begin=0.4) +
+  geom_text(data = lhs, aes(label=tsa_name), x= min(tsa_pad$date) - days(3),
+            hjust = 1,
+            size = 3.5) +
+  geom_text(data = rhs, aes(label=tsa_name), x= max(tsa_pad$date) + days(1),
+            hjust = 0,
+            size = 3.5) +
+  theme_modern_rc() +
+  theme(
+    axis.line.y = element_blank(),
+    axis.text.y = element_blank(),
+    legend.position = "none"
+  ) +
+  coord_cartesian(xlim = c(min(tsa_pad$date) - days(16), 
+                           max(tsa_pad$date) + days(15))) 
+
+img_name <- "tsa-bump-wide.png"
+ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) < 2) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}
+
+
+tsa_pad %>% ggplot(aes(x=date, y=hosp_per_100k)) +
+  geom_line(aes(color = tsa_name)) + facet_wrap(~tsa_name, ncol = 4) +
+  #theme_modern_rc() +
+  theme(
+    legend.position = "none"
+  ) 
+
+img_name <- "tsa-facet-wide.png"
+ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) < 2) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}
+
+  
+  
