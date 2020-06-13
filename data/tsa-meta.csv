@@ -1,0 +1,24 @@
+#https://txdshs.maps.arcgis.com/apps/opsdashboard/index.html#/0d8bdf9be927459d9cb11b9eaef6101f#https://gov.texas.gov/uploads/files/press/HOSPITAL_BED_CAPACITY_SLIDES_FINAL_4.3.20.pdf,,
+tsa_id,tsa_name,tsa_beds
+A,Panhandle,1142
+B,B,1275
+C,North Texas,562
+D,Big Country,789
+E,North Central Texas,14506
+F,Northeast Texas,1339
+G,Piney Woods,2024
+H,Deep East Texas,532
+I,Border,1881
+J,Texas J,1261
+K,Concho Valley,431
+L,Central Texas,1030
+M,Heart of Texas,634
+N,Brazos Valley,528
+O,Capital Area Trauma,3301
+P,Southwest Texas,6179
+Q,Southeast Texas Trauma,12812
+R,East Texas Gulf Coast,1719
+S,Golden Crescent,555
+T,Seven Flags,332
+U,Coastal Bend,1293
+V,Lower Rio Grande Valley,2471
