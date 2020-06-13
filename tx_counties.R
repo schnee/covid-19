@@ -130,9 +130,15 @@ tsa_pad %>%
     axis.text.y = element_blank(),
     legend.position = "none"
   ) +
+  labs(
+    title = "Hospitalizations per 100k per Day",
+    subtitle = "TSA relative rankings",
+    caption = today()
+  ) +
   coord_cartesian(xlim = c(min(tsa_pad$date) - days(16), 
                            max(tsa_pad$date) + days(15))) 
 
+dpi=100
 img_name <- "tsa-bump-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
@@ -148,7 +154,12 @@ tsa_pad %>% ggplot(aes(x=date, y=hosp_per_100k)) +
   #theme_modern_rc() +
   theme(
     legend.position = "none"
-  ) 
+  ) +
+  labs(
+    title = "Hospitalizations per 100k per Day",
+    subtitle = "Trauma Service Areas",
+    caption = today()
+  )
 
 img_name <- "tsa-facet-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
