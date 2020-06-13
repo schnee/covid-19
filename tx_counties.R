@@ -139,7 +139,7 @@ tsa_pad %>%
                            max(tsa_pad$date) + days(15))) 
 
 dpi=100
-img_name <- "tsa-bump-wide.png"
+img_name <- "tsa-hosp-ranking-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
 cc <- drive_find(pattern = "covid_img", n_max = 10)
@@ -161,7 +161,7 @@ tsa_pad %>% ggplot(aes(x=date, y=hosp_per_100k)) +
     caption = today()
   )
 
-img_name <- "tsa-facet-wide.png"
+img_name <- "tsa-hosp-per100k-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
 cc <- drive_find(pattern = "covid_img", n_max = 10)
@@ -171,4 +171,23 @@ if(nrow(cc) < 2) {
 }
 
   
-  
+tsa_pad %>% ggplot(aes(x=date, y=hosp_ct)) +
+  geom_line(aes(color = tsa_name)) + facet_wrap(~tsa_name, ncol = 4, scales = "free") +
+  #theme_modern_rc() +
+  theme(
+    legend.position = "none"
+  ) +
+  labs(
+    title = "Hospitalization Counts per Day",
+    subtitle = "Trauma Service Areas",
+    caption = today()
+  )
+
+img_name <- "tsa-hosp-ct-wide.png"
+ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) < 2) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}

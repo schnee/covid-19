@@ -1,255 +1,255 @@
-county,tsa
-Armstrong,A
-Briscoe,A
-Carson,A
-Childress,A
-Collingsworth,A
-Dallam,A
-Deaf Smith,A
-Donley,A
-Gray,A
-Hall,A
-Hansford,A
-Hartley,A
-Hemphill,A
-Hutchinson,A
-Lipscomb,A
-Moore,A
-Ochiltree,A
-Oldham,A
-Parmer,A
-Potter,A
-Randall,A
-Roberts,A
-Sherman,A
-Swisher,A
-Wheeler,A
-Bailey,B
-Borden,B
-Castro,B
-Cochran,B
-Cottle,B
-Crosby,B
-Dawson,B
-Dickens,B
-Floyd,B
-Gaines,B
-Garza,B
-Hale,B
-Hockley,B
-Kent,B
-King,B
-Lamb,B
-Lubbock,B
-Lynn,B
-Motley,B
-Scurry,B
-Terry,B
-Yoakum,B
-Archer,C
-Baylor,C
-Clay,C
-Foard,C
-Hardeman,C
-Jack,C
-Montague,C
-Wichita,C
-Wilbarger,C
-Young,C
-Brown,D
-Callahan,D
-Coleman,D
-Comanche,D
-Eastland,D
-Fisher,D
-Haskell,D
-Jones,D
-Knox,D
-Mitchell,D
-Nolan,D
-Shackelford,D
-Stephens,D
-Stonewall,D
-Taylor,D
-Throckmorton,D
-Collin,E
-Cooke,E
-Dallas,E
-Denton,E
-Ellis,E
-Erath,E
-Fannin,E
-Grayson,E
-Hood,E
-Hunt,E
-Johnson,E
-Kaufman,E
-Navarro,E
-Palo Pinto,E
-Parker,E
-Rockwall,E
-Somervell,E
-Tarrant,E
-Wise,E
-Bowie,F
-Cass,F
-Delta,F
-Hopkins,F
-Lamar,F
-Morris,F
-Red River,F
-Titus,F
-Anderson,G
-Camp,G
-Cherokee,G
-Franklin,G
-Freestone,G
-Gregg,G
-Harrison,G
-Henderson,G
-Houston,G
-Marion,G
-Panola,G
-Rains,G
-Rusk,G
-Shelby,G
-Smith,G
-Trinity,G
-Upshur,G
-Van Zandt,G
-Wood,G
-Angelina,H
-Nacogdoches,H
-Polk,H
-Sabine,H
-San Augustine,H
-San Jacinto,H
-Tyler,H
-Culberson,I
-El Paso,I
-Hudspeth,I
-Andrews,J
-Brewster,J
-Crane,J
-Ector,J
-Glasscock,J
-Howard,J
-Jeff Davis,J
-Loving,J
-Martin,J
-Midland,J
-Pecos,J
-Presidio,J
-Reeves,J
-Terrell,J
-Upton,J
-Ward,J
-Winkler,J
-Coke,K
-Concho,K
-Crockett,K
-Irion,K
-Kimble,K
-Mason,K
-McCulloch,K
-Menard,K
-Reagan,K
-Runnels,K
-Schleicher,K
-Sterling,K
-Sutton,K
-Tom Green,K
-Bell,L
-Coryell,L
-Hamilton,L
-Lampasas,L
-Milam,L
-Mills,L
-Bosque,M
-Falls,M
-Hill,M
-Limestone,M
-McLennan,M
-Brazos,N
-Burleson,N
-Grimes,N
-Leon,N
-Madison,N
-Robertson,N
-Washington,N
-Bastrop,O
-Blanco,O
-Burnet,O
-Caldwell,O
-Fayette,O
-Hays,O
-Lee,O
-Llano,O
-San Saba,O
-Travis,O
-Williamson,O
-Atascosa,P
-Bandera,P
-Bexar,P
-Comal,P
-Dimmit,P
-Edwards,P
-Frio,P
-Gillespie,P
-Gonzales,P
-Guadalupe,P
-Karnes,P
-Kendall,P
-Kerr,P
-Kinney,P
-La Salle,P
-Maverick,P
-Medina,P
-Real,P
-Uvalde,P
-Val Verde,P
-Wilson,P
-Zavala,P
-Austin,Q
-Colorado,Q
-Fort Bend,Q
-Harris,Q
-Matagorda,Q
-Montgomery,Q
-Walker,Q
-Waller,Q
-Wharton,Q
-Brazoria,R
-Chambers,R
-Galveston,R
-Hardin,R
-Jasper,R
-Jefferson,R
-Liberty,R
-Newton,R
-Orange,R
-Calhoun,S
-DeWitt,S
-Goliad,S
-Jackson,S
-Lavaca,S
-Victoria,S
-Jim Hogg,T
-Webb,T
-Zapata,T
-Aransas,U
-Bee,U
-Brooks,U
-Duval,U
-Jim Wells,U
-Kenedy,U
-Kleberg,U
-Live Oak,U
-McMullen,U
-Nueces,U
-Refugio,U
-San Patricio,U
-Cameron,V
-Hidalgo,V
-Starr,V
-Willacy,V
+county,tsa,tsa_name
+Armstrong,A,Panhandle
+Briscoe,A,Panhandle
+Carson,A,Panhandle
+Childress,A,Panhandle
+Collingsworth,A,Panhandle
+Dallam,A,Panhandle
+Deaf Smith,A,Panhandle
+Donley,A,Panhandle
+Gray,A,Panhandle
+Hall,A,Panhandle
+Hansford,A,Panhandle
+Hartley,A,Panhandle
+Hemphill,A,Panhandle
+Hutchinson,A,Panhandle
+Lipscomb,A,Panhandle
+Moore,A,Panhandle
+Ochiltree,A,Panhandle
+Oldham,A,Panhandle
+Parmer,A,Panhandle
+Potter,A,Panhandle
+Randall,A,Panhandle
+Roberts,A,Panhandle
+Sherman,A,Panhandle
+Swisher,A,Panhandle
+Wheeler,A,Panhandle
+Bailey,B,B
+Borden,B,B
+Castro,B,B
+Cochran,B,B
+Cottle,B,B
+Crosby,B,B
+Dawson,B,B
+Dickens,B,B
+Floyd,B,B
+Gaines,B,B
+Garza,B,B
+Hale,B,B
+Hockley,B,B
+Kent,B,B
+King,B,B
+Lamb,B,B
+Lubbock,B,B
+Lynn,B,B
+Motley,B,B
+Scurry,B,B
+Terry,B,B
+Yoakum,B,B
+Archer,C,North Texas
+Baylor,C,North Texas
+Clay,C,North Texas
+Foard,C,North Texas
+Hardeman,C,North Texas
+Jack,C,North Texas
+Montague,C,North Texas
+Wichita,C,North Texas
+Wilbarger,C,North Texas
+Young,C,North Texas
+Brown,D,Big Country
+Callahan,D,Big Country
+Coleman,D,Big Country
+Comanche,D,Big Country
+Eastland,D,Big Country
+Fisher,D,Big Country
+Haskell,D,Big Country
+Jones,D,Big Country
+Knox,D,Big Country
+Mitchell,D,Big Country
+Nolan,D,Big Country
+Shackelford,D,Big Country
+Stephens,D,Big Country
+Stonewall,D,Big Country
+Taylor,D,Big Country
+Throckmorton,D,Big Country
+Collin,E,North Central Texas
+Cooke,E,North Central Texas
+Dallas,E,North Central Texas
+Denton,E,North Central Texas
+Ellis,E,North Central Texas
+Erath,E,North Central Texas
+Fannin,E,North Central Texas
+Grayson,E,North Central Texas
+Hood,E,North Central Texas
+Hunt,E,North Central Texas
+Johnson,E,North Central Texas
+Kaufman,E,North Central Texas
+Navarro,E,North Central Texas
+Palo Pinto,E,North Central Texas
+Parker,E,North Central Texas
+Rockwall,E,North Central Texas
+Somervell,E,North Central Texas
+Tarrant,E,North Central Texas
+Wise,E,North Central Texas
+Bowie,F,Northeast Texas
+Cass,F,Northeast Texas
+Delta,F,Northeast Texas
+Hopkins,F,Northeast Texas
+Lamar,F,Northeast Texas
+Morris,F,Northeast Texas
+Red River,F,Northeast Texas
+Titus,F,Northeast Texas
+Anderson,G,Piney Woods
+Camp,G,Piney Woods
+Cherokee,G,Piney Woods
+Franklin,G,Piney Woods
+Freestone,G,Piney Woods
+Gregg,G,Piney Woods
+Harrison,G,Piney Woods
+Henderson,G,Piney Woods
+Houston,G,Piney Woods
+Marion,G,Piney Woods
+Panola,G,Piney Woods
+Rains,G,Piney Woods
+Rusk,G,Piney Woods
+Shelby,G,Piney Woods
+Smith,G,Piney Woods
+Trinity,G,Piney Woods
+Upshur,G,Piney Woods
+Van Zandt,G,Piney Woods
+Wood,G,Piney Woods
+Angelina,H,Deep East Texas
+Nacogdoches,H,Deep East Texas
+Polk,H,Deep East Texas
+Sabine,H,Deep East Texas
+San Augustine,H,Deep East Texas
+San Jacinto,H,Deep East Texas
+Tyler,H,Deep East Texas
+Culberson,I,Border
+El Paso,I,Border
+Hudspeth,I,Border
+Andrews,J,Texas J
+Brewster,J,Texas J
+Crane,J,Texas J
+Ector,J,Texas J
+Glasscock,J,Texas J
+Howard,J,Texas J
+Jeff Davis,J,Texas J
+Loving,J,Texas J
+Martin,J,Texas J
+Midland,J,Texas J
+Pecos,J,Texas J
+Presidio,J,Texas J
+Reeves,J,Texas J
+Terrell,J,Texas J
+Upton,J,Texas J
+Ward,J,Texas J
+Winkler,J,Texas J
+Coke,K,Concho Valley
+Concho,K,Concho Valley
+Crockett,K,Concho Valley
+Irion,K,Concho Valley
+Kimble,K,Concho Valley
+Mason,K,Concho Valley
+McCulloch,K,Concho Valley
+Menard,K,Concho Valley
+Reagan,K,Concho Valley
+Runnels,K,Concho Valley
+Schleicher,K,Concho Valley
+Sterling,K,Concho Valley
+Sutton,K,Concho Valley
+Tom Green,K,Concho Valley
+Bell,L,Central Texas
+Coryell,L,Central Texas
+Hamilton,L,Central Texas
+Lampasas,L,Central Texas
+Milam,L,Central Texas
+Mills,L,Central Texas
+Bosque,M,Heart of Texas
+Falls,M,Heart of Texas
+Hill,M,Heart of Texas
+Limestone,M,Heart of Texas
+McLennan,M,Heart of Texas
+Brazos,N,Brazos Valley
+Burleson,N,Brazos Valley
+Grimes,N,Brazos Valley
+Leon,N,Brazos Valley
+Madison,N,Brazos Valley
+Robertson,N,Brazos Valley
+Washington,N,Brazos Valley
+Bastrop,O,Capital Area Trauma
+Blanco,O,Capital Area Trauma
+Burnet,O,Capital Area Trauma
+Caldwell,O,Capital Area Trauma
+Fayette,O,Capital Area Trauma
+Hays,O,Capital Area Trauma
+Lee,O,Capital Area Trauma
+Llano,O,Capital Area Trauma
+San Saba,O,Capital Area Trauma
+Travis,O,Capital Area Trauma
+Williamson,O,Capital Area Trauma
+Atascosa,P,Southwest Texas
+Bandera,P,Southwest Texas
+Bexar,P,Southwest Texas
+Comal,P,Southwest Texas
+Dimmit,P,Southwest Texas
+Edwards,P,Southwest Texas
+Frio,P,Southwest Texas
+Gillespie,P,Southwest Texas
+Gonzales,P,Southwest Texas
+Guadalupe,P,Southwest Texas
+Karnes,P,Southwest Texas
+Kendall,P,Southwest Texas
+Kerr,P,Southwest Texas
+Kinney,P,Southwest Texas
+La Salle,P,Southwest Texas
+Maverick,P,Southwest Texas
+Medina,P,Southwest Texas
+Real,P,Southwest Texas
+Uvalde,P,Southwest Texas
+Val Verde,P,Southwest Texas
+Wilson,P,Southwest Texas
+Zavala,P,Southwest Texas
+Austin,Q,Southeast Texas Trauma
+Colorado,Q,Southeast Texas Trauma
+Fort Bend,Q,Southeast Texas Trauma
+Harris,Q,Southeast Texas Trauma
+Matagorda,Q,Southeast Texas Trauma
+Montgomery,Q,Southeast Texas Trauma
+Walker,Q,Southeast Texas Trauma
+Waller,Q,Southeast Texas Trauma
+Wharton,Q,Southeast Texas Trauma
+Brazoria,R,East Texas Gulf Coast
+Chambers,R,East Texas Gulf Coast
+Galveston,R,East Texas Gulf Coast
+Hardin,R,East Texas Gulf Coast
+Jasper,R,East Texas Gulf Coast
+Jefferson,R,East Texas Gulf Coast
+Liberty,R,East Texas Gulf Coast
+Newton,R,East Texas Gulf Coast
+Orange,R,East Texas Gulf Coast
+Calhoun,S,Golden Crescent
+DeWitt,S,Golden Crescent
+Goliad,S,Golden Crescent
+Jackson,S,Golden Crescent
+Lavaca,S,Golden Crescent
+Victoria,S,Golden Crescent
+Jim Hogg,T,Seven Flags
+Webb,T,Seven Flags
+Zapata,T,Seven Flags
+Aransas,U,Coastal Bend
+Bee,U,Coastal Bend
+Brooks,U,Coastal Bend
+Duval,U,Coastal Bend
+Jim Wells,U,Coastal Bend
+Kenedy,U,Coastal Bend
+Kleberg,U,Coastal Bend
+Live Oak,U,Coastal Bend
+McMullen,U,Coastal Bend
+Nueces,U,Coastal Bend
+Refugio,U,Coastal Bend
+San Patricio,U,Coastal Bend
+Cameron,V,Lower Rio Grande Valley
+Hidalgo,V,Lower Rio Grande Valley
+Starr,V,Lower Rio Grande Valley
+Willacy,V,Lower Rio Grande Valley
