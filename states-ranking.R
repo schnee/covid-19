@@ -370,9 +370,6 @@ if(nrow(cc) < 2) {
   drive_put(img_name, path = as_id(cc$id), img_name)
 }
 
-
-
-
 scp100k %>% group_by(state) %>% arrange(date) %>%
   mutate(week_ago = lag(ranking,7), delta = lag(ranking, 7)- ranking) %>% 
   ungroup() %>%
