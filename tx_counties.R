@@ -181,6 +181,7 @@ if(nrow(cc) < 2) {
 tsa_pad %>% ggplot(aes(x=date, y=hosp_ct)) +
   geom_line(aes(color = tsa_name)) + facet_wrap(~tsa_name.y, ncol = 4, scales = "free") +
   #theme_modern_rc() +
+  ggthemes::theme_few() +
   theme(
     legend.position = "none"
   ) +
@@ -214,7 +215,7 @@ tsa_pad %>% ggplot(aes(x=date, y=hosp_cap)) +
     subtitle = "Trauma Service Areas",
     caption = today()
   )
-img_name <- "tsa-hosp-cao-wide.png"
+img_name <- "tsa-hosp-cap-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
 cc <- drive_find(pattern = "covid_img", n_max = 10)
