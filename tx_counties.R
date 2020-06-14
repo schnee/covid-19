@@ -45,7 +45,10 @@ c_to_t <- read_csv("./data/county-tsa-map.csv")
 counties <- counties %>%
   left_join(c_to_t, by = c("county" = "county"))
 
-# summarize each tsa
+# read in some facts about each TSA
+tsa_fact <-read_csv("./data/tsa-fact.csv", comment = "# ")
+
+# summarize each tsa, and annotate it with the fact table
 
 tsa <- counties %>%
   group_by(tsa) %>%
@@ -53,7 +56,7 @@ tsa <- counties %>%
             area = sum(area)) %>%
   mutate(pop_density = population / area) %>%
   arrange(desc(pop_density)) %>%
-  mutate(pop_density_ranking = row_number())
+  left_join(tsa_fact, by = c("tsa" = "tsa_id"))
 
 # OK now read in the TSA hospitalization. 
 
@@ -86,7 +89,8 @@ tsa_hosp <- tsa_hosp_w %>%
   mutate(date = as.Date(sequence, origin = "1899-12-30")) %>%
   mutate(tsa_id = str_remove(tsa_id, "[\\W]")) %>%
   select(-sequence) %>%
-  left_join(tsa, by = c("tsa_id" = "tsa"))
+  left_join(tsa, by = c("tsa_id" = "tsa")) %>%
+  mutate(hosp_cap = hosp_ct / tsa_beds)
 
 # we will need a couple of dates at the beginning of the tsa_hosp frame
 # so that the initial rankings are purely based on population density
@@ -95,8 +99,9 @@ tsa_pad <- tsa_hosp %>%
   bind_rows(tibble(date = seq(from = min(tsa_hosp$date) - days(2), 
                               to = min(tsa_hosp$date) - days(1), 
                               by = "day"))) %>%
-  complete(date, nesting(tsa_id, tsa_name), fill = list(hosp_ct = 0)) %>%
-  select(date, tsa_id, tsa_name, hosp_ct) %>%
+  complete(date, nesting(tsa_id, tsa_name.x, tsa_name.y), fill = list(hosp_ct = 0,
+                                                                      hosp_cap = 0)) %>%
+  select(date, tsa_id, tsa_name.x, tsa_name.y, hosp_ct, hosp_cap) %>%
   filter(!is.na(tsa_id)) %>%
   left_join(tsa, by=c("tsa_id" = "tsa")) %>%
   group_by(date) %>%
@@ -150,7 +155,9 @@ if(nrow(cc) < 2) {
 
 
 tsa_pad %>% ggplot(aes(x=date, y=hosp_per_100k)) +
-  geom_line(aes(color = tsa_name)) + facet_wrap(~tsa_name, ncol = 4) +
+  geom_line(aes(color = tsa_name)) + 
+  facet_wrap(~tsa_name, ncol = 4) +
+  ggthemes::theme_few() +
   #theme_modern_rc() +
   theme(
     legend.position = "none"
@@ -172,13 +179,13 @@ if(nrow(cc) < 2) {
 
   
 tsa_pad %>% ggplot(aes(x=date, y=hosp_ct)) +
-  geom_line(aes(color = tsa_name)) + facet_wrap(~tsa_name, ncol = 4, scales = "free") +
+  geom_line(aes(color = tsa_name)) + facet_wrap(~tsa_name.y, ncol = 4, scales = "free") +
   #theme_modern_rc() +
   theme(
     legend.position = "none"
   ) +
   labs(
-    title = "Hospitalization Counts per Day",
+    title = "Hospitalization Counts per Day due to COVID-19",
     subtitle = "Trauma Service Areas",
     caption = today()
   )
@@ -191,3 +198,28 @@ cc <- drive_find(pattern = "covid_img", n_max = 10)
 if(nrow(cc) < 2) {
   drive_put(img_name, path = as_id(cc$id), img_name)
 }
+
+
+tsa_pad %>% ggplot(aes(x=date, y=hosp_cap)) +
+  geom_line(aes(color = tsa_name)) + 
+  scale_y_continuous(labels = scales::percent) +
+  facet_wrap(~tsa_name.y, ncol = 4) +
+  #theme_modern_rc() +
+  ggthemes::theme_few() +
+  theme(
+    legend.position = "none"
+  ) +
+  labs(
+    title = "Hospitalization % Beds due to COVID-19 ",
+    subtitle = "Trauma Service Areas",
+    caption = today()
+  )
+img_name <- "tsa-hosp-cao-wide.png"
+ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+cc <- drive_find(pattern = "covid_img", n_max = 10)
+
+if(nrow(cc) < 2) {
+  drive_put(img_name, path = as_id(cc$id), img_name)
+}
+
