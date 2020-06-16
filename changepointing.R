@@ -66,7 +66,7 @@ one_tsa %>%
   geom_step(aes(x=date, y=hosp_ct_mean), color="black", direction="mid", linetype=2) +
   labs(
     title = paste(min(one_tsa$tsa_id),min(one_tsa$tsa_name.y), sep="-"),
-    y = "Hospital Count (7-day average)"
+    y = "Hospitalization Count (7-day moving average)"
   ) + theme_few() +
   theme(
     legend.position="none"
