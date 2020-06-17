@@ -16,14 +16,22 @@ one_tsa <- tsa_hosp %>%
   ungroup() %>%
   filter(tsa_id == "O") 
 
+# use two-phase changepoint detection:
+# 1) changepoint package for quick search 
+# 2) build model from quick search and use
+#    that model in mcp package for more 
+#    thorough search
+
 fit_changepoint = cpt.meanvar(one_tsa$mean_7, method = "AMOC")
 plot(fit_changepoint)
 str(fit_changepoint)
 
 cps <- cpts(fit_changepoint)
 
-# maybe add the change point locations as priors, somehow?
-# using 1+ number of changepoints above as an aggressive attempt
+# maybe add the change point locations as priors, somehow? Right now,
+# just the number of changepoints is a "prior" of sorts
+#
+# using 1 + number of changepoints above as an aggressive attempt
 # to find changepoints. Not sure if sound...
 model <- c(mean_7 ~ sequence, 
            rep_len(c(1~1), 
