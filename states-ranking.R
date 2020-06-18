@@ -8,6 +8,17 @@ library(googledrive)
 
 drive_auth(email= "schneeman@gmail.com")
 
+
+upload_images <- function(img_name) {
+  cc <- drive_find(pattern = "covid_img", n_max = 10)
+  
+  if(nrow(cc) < 2) {
+    drive_put(img_name, path = as_id(cc$id), img_name)
+  }
+}
+
+images <- list()
+
 states_to_remove <- c("Guam", "Northern Mariana Islands", "Virgin Islands")
 
 # read from the NY Times state-level covid data, and from the US Census
@@ -118,11 +129,7 @@ ggsave("deaths-area-7day-ma.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi
 img_name <- "deaths-area-7day-ma-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
-cc <- drive_find(pattern = "covid_img", n_max = 10)
-
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
+images <- c(images, img_name)
 
 
 # do everything that we did above for deaths, but for cases
@@ -154,11 +161,7 @@ ggsave("cases-area-7day-ma.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi,
 img_name <- "cases-area-7day-ma-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
-cc <- drive_find(pattern = "covid_img", n_max = 10)
-
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
+images <- c(images, img_name)
 
 # get the date of the first death
 
@@ -227,12 +230,7 @@ ggsave("deaths-ranking.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, typ
 img_name <- "deaths-ranking-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
-cc <- drive_find(pattern = "covid_img", n_max = 10)
-
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
-
+images <- c(images, img_name)
 
 corr <- signif(cor(sdp100k$density, sdp100k$deaths_per_100k), digits = 2)
 
@@ -258,12 +256,7 @@ ggsave("deaths-cor.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = 
 img_name <- "deaths-cor-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
-cc <- drive_find(pattern = "covid_img", n_max = 10)
-
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
-
+images <- c(images, img_name)
 
 # get the date of the first case
 first_case <- covid_state %>% filter(cases > 0) %>%
@@ -334,12 +327,7 @@ ggsave("cases-ranking.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type
 img_name <- "cases-ranking-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
-cc <- drive_find(pattern = "covid_img", n_max = 10)
-
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
-
+images <- c(images, img_name)
 
 corr <- signif(cor(scp100k$density, scp100k$cases_per_100k), digits = 2)
 
@@ -364,11 +352,7 @@ ggsave("cases-cor.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "
 img_name <- "cases-cor-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
-cc <- drive_find(pattern = "covid_img", n_max = 10)
-
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
+images <- c(images, img_name)
 
 scp100k %>% group_by(state) %>% arrange(date) %>%
   mutate(week_ago = lag(ranking,7), delta = lag(ranking, 7)- ranking) %>% 
@@ -380,3 +364,5 @@ sdp100k %>% group_by(state) %>% arrange(date) %>%
   mutate(week_ago = lag(ranking,7), delta = lag(ranking, 7)- ranking) %>% 
   ungroup() %>%
   filter(date==max(date)) %>% arrange(desc(delta)) %>% view()
+
+images %>% map(upload_images)

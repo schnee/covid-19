@@ -13,6 +13,16 @@ library(googledrive)
 
 drive_auth(email= "schneeman@gmail.com")
 
+upload_images <- function(img_name) {
+  cc <- drive_find(pattern = "covid_img", n_max = 10)
+  
+  if(nrow(cc) < 2) {
+    drive_put(img_name, path = as_id(cc$id), img_name)
+  }
+}
+
+images <- list()
+
 # yay, parse Wikipedia tables - that's sure to be maintenance free....
 
 url <- "https://en.wikipedia.org/wiki/List_of_counties_in_Texas"
@@ -147,12 +157,7 @@ dpi=100
 img_name <- "tsa-hosp-ranking-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
-cc <- drive_find(pattern = "covid_img", n_max = 10)
-
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
-
+images <- c(images, img_name)
 
 tsa_pad %>% ggplot(aes(x=date, y=hosp_per_100k)) +
   geom_line(aes(color = tsa_name)) + 
@@ -171,13 +176,8 @@ tsa_pad %>% ggplot(aes(x=date, y=hosp_per_100k)) +
 img_name <- "tsa-hosp-per100k-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
-cc <- drive_find(pattern = "covid_img", n_max = 10)
+images <- c(images, img_name)
 
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
-
-  
 tsa_pad %>% ggplot(aes(x=date, y=hosp_ct)) +
   geom_line(aes(color = tsa_name)) + facet_wrap(~tsa_name.y, ncol = 4, scales = "free") +
   #theme_modern_rc() +
@@ -194,12 +194,7 @@ tsa_pad %>% ggplot(aes(x=date, y=hosp_ct)) +
 img_name <- "tsa-hosp-ct-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
-cc <- drive_find(pattern = "covid_img", n_max = 10)
-
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
-
+images <- c(images, img_name)
 
 tsa_pad %>% ggplot(aes(x=date, y=hosp_cap)) +
   geom_line(aes(color = tsa_name)) + 
@@ -218,9 +213,6 @@ tsa_pad %>% ggplot(aes(x=date, y=hosp_cap)) +
 img_name <- "tsa-hosp-cap-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
-cc <- drive_find(pattern = "covid_img", n_max = 10)
+images <- c(images, img_name)
 
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
-
+images %>% map(upload_images)
