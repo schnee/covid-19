@@ -17,6 +17,8 @@ filter_pivot <- function(tib){
     rename(region = `Country/Region`) %>% 
     group_by(region, date) %>% summarize(sum_ct = sum(count))
 }
+
+images <- list()
   
 
 covid <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
@@ -101,14 +103,7 @@ crazy_plot <- covid_longer_j %>%
 img_name <- "covid-crazy.png"
 ggsave(plot = crazy_plot, filename = img_name, width = 16, height=9, dpi = 100, type = "cairo")
 
-drive_auth(email= "schneeman@gmail.com")
-
-cc <- drive_find(pattern = "covid_img", n_max = 10)
-
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
-
+images <- c(images, img_name)
 
 covid_longer_j %>% ungroup() %>% arrange(date) %>% 
   mutate(delta_casualty = deaths - lag(deaths),
@@ -129,11 +124,7 @@ ggsave("delta-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "
 img_name <- "delta-wide.png"
 ggsave(img_name, width = 16, height = 9, dpi = dpi, type = "cairo")
 
-cc <- drive_find(pattern = "covid_img", n_max = 10)
-
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
+images <- c(images, img_name)
 
 covid_longer_j %>%
   ggplot() + 
@@ -168,11 +159,7 @@ ggsave("covid-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "
 img_name <- "covid-wide.png"
 ggsave(img_name, width = 16, height = 9, dpi = dpi, type = "cairo")
 
-cc <- drive_find(pattern = "covid_img", n_max = 10)
-
-if(nrow(cc) < 2) {
-  drive_put(img_name, path = as_id(cc$id), img_name)
-}
+images <- c(images, img_name)
 
 covid_longer_j %>%
   ggplot(aes(x=date, y=cfr_lag)) +
@@ -192,3 +179,15 @@ covid_longer_j %>%
 
 dpi <- 100
 ggsave("cfr-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "cairo")
+
+
+upload_images <- function(img_name) {
+  cc <- drive_find(pattern = "covid_img", n_max = 10)
+  
+  if(nrow(cc) < 2) {
+    drive_put(img_name, path = as_id(cc$id), img_name)
+  }
+}
+
+drive_auth(email= "schneeman@gmail.com")
+images %>% map(upload_images)
