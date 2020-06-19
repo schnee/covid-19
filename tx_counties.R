@@ -9,17 +9,7 @@ library(lubridate)
 library(stringr)
 library(ggplot2)
 library(hrbrthemes)
-library(googledrive)
-
-drive_auth(email= "schneeman@gmail.com")
-
-upload_images <- function(img_name) {
-  cc <- drive_find(pattern = "covid_img", n_max = 10)
-  
-  if(nrow(cc) < 2) {
-    drive_put(img_name, path = as_id(cc$id), img_name)
-  }
-}
+devtools::load_all("./covidutil/")
 
 images <- list()
 
@@ -148,7 +138,7 @@ tsa_pad %>%
   labs(
     title = "Hospitalizations per 100k per Day",
     subtitle = "TSA relative rankings",
-    caption = today()
+    caption = max(tsa_pad$date)
   ) +
   coord_cartesian(xlim = c(min(tsa_pad$date) - days(16), 
                            max(tsa_pad$date) + days(15))) 
@@ -170,7 +160,7 @@ tsa_pad %>% ggplot(aes(x=date, y=hosp_per_100k)) +
   labs(
     title = "Hospitalizations per 100k per Day",
     subtitle = "Trauma Service Areas",
-    caption = today()
+    caption = max(tsa_pad$date)
   )
 
 img_name <- "tsa-hosp-per100k-wide.png"
@@ -188,7 +178,7 @@ tsa_pad %>% ggplot(aes(x=date, y=hosp_ct)) +
   labs(
     title = "Hospitalization Counts per Day due to COVID-19",
     subtitle = "Trauma Service Areas",
-    caption = today()
+    caption = max(tsa_pad$date)
   )
 
 img_name <- "tsa-hosp-ct-wide.png"
@@ -208,11 +198,12 @@ tsa_pad %>% ggplot(aes(x=date, y=hosp_cap)) +
   labs(
     title = "Hospitalization % Beds due to COVID-19 ",
     subtitle = "Trauma Service Areas",
-    caption = today()
+    caption = max(tsa_pad$date)
   )
 img_name <- "tsa-hosp-cap-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
 images <- c(images, img_name)
 
-images %>% map(upload_images)
+covidutil::gauth(email= "schneeman@gmail.com")
+images %>% map(covidutil::upload_images)

@@ -4,7 +4,8 @@ library(hrbrthemes)
 library(ggthemes)
 library(lubridate)
 library(Cairo)
-library(googledrive)
+devtools::load_all("./covidutil/")
+
 
 drive_auth(email= "schneeman@gmail.com")
 
@@ -365,4 +366,5 @@ sdp100k %>% group_by(state) %>% arrange(date) %>%
   ungroup() %>%
   filter(date==max(date)) %>% arrange(desc(delta)) %>% view()
 
-images %>% map(upload_images)
+covidutil::gauth(email= "schneeman@gmail.com")
+images %>% map(covidutil::upload_images)

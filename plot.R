@@ -1,5 +1,4 @@
 library(tidyverse)
-library(googledrive)
 library(lubridate)
 library(ggrepel)
 library(ggthemes)
@@ -180,14 +179,5 @@ covid_longer_j %>%
 dpi <- 100
 ggsave("cfr-fark.png", width = 850 / dpi, height = 679/dpi , dpi=dpi, type = "cairo")
 
-
-upload_images <- function(img_name) {
-  cc <- drive_find(pattern = "covid_img", n_max = 10)
-  
-  if(nrow(cc) < 2) {
-    drive_put(img_name, path = as_id(cc$id), img_name)
-  }
-}
-
-drive_auth(email= "schneeman@gmail.com")
-images %>% map(upload_images)
+covidutil::gauth(email= "schneeman@gmail.com")
+images %>% map(covidutil::upload_images)
