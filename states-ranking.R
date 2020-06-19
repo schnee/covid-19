@@ -4,18 +4,7 @@ library(hrbrthemes)
 library(ggthemes)
 library(lubridate)
 library(Cairo)
-library(googledrive)
-
-drive_auth(email= "schneeman@gmail.com")
-
-
-upload_images <- function(img_name) {
-  cc <- drive_find(pattern = "covid_img", n_max = 10)
-  
-  if(nrow(cc) < 2) {
-    drive_put(img_name, path = as_id(cc$id), img_name)
-  }
-}
+devtools::load_all("./covidutil/")
 
 images <- list()
 
@@ -365,4 +354,5 @@ sdp100k %>% group_by(state) %>% arrange(date) %>%
   ungroup() %>%
   filter(date==max(date)) %>% arrange(desc(delta)) %>% view()
 
-images %>% map(upload_images)
+covidutil::gauth(email= "schneeman@gmail.com")
+images %>% map(covidutil::upload_images)
