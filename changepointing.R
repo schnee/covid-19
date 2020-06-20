@@ -66,24 +66,28 @@ segment_tib <- one_tsa %>%
   mutate(shade = as.numeric(changepoint) %%2)
 
 
+highpoints <- one_tsa %>%
+  mutate(cummax = cummax(hosp_ct)) %>%
+  filter(cummax == hosp_ct)
+
 one_tsa %>%
   ggplot() +
   geom_rect(data = segment_tib, aes(xmin = xmin, xmax=xmax, fill = as.factor(shade)), ymin=0, ymax=Inf, color=NA) +
   scale_fill_manual(values = c("#eeeeee", "#e0e0e0")) +
   geom_line(aes(x=date, y=mean_7), color="black") +
   geom_line(aes(x=date, y=hosp_ct), color="gray") +
-  geom_step(aes(x=date, y=mean_7_mean), color="black", direction="vh", linetype=2) +
+  #geom_step(aes(x=date, y=mean_7_mean), color="black", direction="vh", linetype=2) +
+  geom_point(data = highpoints, aes(x=date, y=hosp_ct), shape=1, color="black") +
   labs(
     title = paste(min(one_tsa$tsa_id),min(one_tsa$tsa_name.y), sep="-"),
     subtitle = max(one_tsa$date),
-    caption = str_wrap("Shading shows break points in data, dotted line is the average of the rolling average in each segment",60),
+    caption = str_wrap("Shading shows break points in data, circles are new highpoints",60),
     y = "Hospitalization Count (7-day moving average)",
     x = "Date"
   ) + theme_few() +
   theme(
     legend.position="none"
   )
-
 img_name <- "one-tsa-hosp-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
