@@ -53,11 +53,13 @@ cp_df <- fit$mcmc_post %>%
                values_to = "sequence") %>%
   mutate(sequence = floor(sequence))
 
-one_tsa <- one_tsa %>% left_join(cp_df) %>% fill(changepoint, .direction="up") %>% 
+one_tsa <- one_tsa %>% left_join(cp_df) %>% 
+  fill(changepoint, .direction="up") %>% 
   replace_na(list(changepoint = "cp_n")) %>%
   group_by(changepoint) %>%
   mutate(mean_7_mean = mean(mean_7)) %>%
-  ungroup() 
+  ungroup() %>%
+  mutate(cummax = cummax(hosp_ct))
 
 segment_tib <- one_tsa %>% 
   group_by(changepoint) %>% 
@@ -67,26 +69,25 @@ segment_tib <- one_tsa %>%
 
 
 highpoints <- one_tsa %>%
-  mutate(cummax = cummax(hosp_ct)) %>%
   filter(cummax == hosp_ct)
 
 one_tsa %>%
+  pivot_longer(cols = c(mean_7, hosp_ct), names_to = "type", values_to = "count") %>%
   ggplot() +
   geom_rect(data = segment_tib, aes(xmin = xmin, xmax=xmax, fill = as.factor(shade)), ymin=0, ymax=Inf, color=NA) +
-  scale_fill_manual(values = c("#eeeeee", "#e0e0e0")) +
-  geom_line(aes(x=date, y=mean_7), color="black") +
-  geom_line(aes(x=date, y=hosp_ct), color="gray") +
-  #geom_step(aes(x=date, y=mean_7_mean), color="black", direction="vh", linetype=2) +
+  scale_fill_manual(guide=FALSE, values = c("#eeeeee", "#e0e0e0")) +
+  geom_line(aes(x=date, y=count, color=type)) +
+  scale_color_manual(NULL,values = c("gray", "black"), labels = c("Daily", "7-day average")) +
   geom_point(data = highpoints, aes(x=date, y=hosp_ct), shape=1, color="black") +
   labs(
     title = paste(min(one_tsa$tsa_id),min(one_tsa$tsa_name.y), sep="-"),
     subtitle = max(one_tsa$date),
     caption = str_wrap("Shading shows break points in data, circles are new highpoints",60),
-    y = "Hospitalization Count (7-day moving average)",
+    y = "Hospitalizations",
     x = "Date"
   ) + theme_few() +
   theme(
-    legend.position="none"
+    #legend.position="none"
   )
 img_name <- "one-tsa-hosp-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
