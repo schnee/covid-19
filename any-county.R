@@ -69,7 +69,6 @@ one_county <- one_county %>% left_join(cp_df) %>%
   mutate(cummax = cummax(daily_cases),
          is_highpoint = cummax == daily_cases)
 
-
 extract_segments <- function(one_county) {
   one_county %>% 
     group_by(changepoint) %>% 
