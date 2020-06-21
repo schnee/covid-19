@@ -1,6 +1,3 @@
-# note, need to fill env by running tx_counties.R first. 
-# This is prototype code
-
 library(mcp)
 library(tidybayes)
 library(changepoint)
@@ -11,9 +8,9 @@ library(RcppRoll)
 
 counties <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
 
-ok <- counties %>% filter(state == "Texas")
+state <- counties %>% filter(state == "Oklahoma")
 
-one_county <- ok %>% filter(county == "Travis")
+one_county <- state %>% filter(county == "Tulsa")
 
 one_county <- one_county %>% 
   mutate(sequence = as.numeric(date)) %>%
@@ -69,7 +66,8 @@ one_county <- one_county %>% left_join(cp_df) %>%
   group_by(changepoint) %>%
   mutate(mean_7_mean = mean(mean_cases_7)) %>%
   ungroup() %>%
-  mutate(cummax = cummax(daily_cases))
+  mutate(cummax = cummax(daily_cases),
+         is_highpoint = cummax == daily_cases)
 
 segment_tib <- one_county %>% 
   group_by(changepoint) %>% 
@@ -79,7 +77,7 @@ segment_tib <- one_county %>%
 
 
 highpoints <- one_county %>%
-  filter(cummax == daily_cases)
+  filter(is_highpoint)
 
 one_county %>%
   pivot_longer(cols = c(mean_cases_7, daily_cases), names_to = "type", values_to = "count") %>%
@@ -88,7 +86,9 @@ one_county %>%
   scale_fill_manual(guide=FALSE, values = c("#eeeeee", "#e0e0e0")) +
   geom_line(aes(x=date, y=count, color=type)) +
   scale_color_manual(NULL,values = c("gray", "black"), labels = c("Daily", "7-day average")) +
-  geom_point(data = highpoints, aes(x=date, y=daily_cases), shape=1, color="black") +
+  geom_point(aes(x=date, y=count, shape = is_highpoint, size = type), color="black", show.legend = FALSE) +
+  scale_size_manual(NULL, values = c(1.5,0)) + # zero-sized if on the average line
+  scale_shape_manual(NULL, values = c(NA,1)) + # no shape if not a highpoint
   labs(
     title = paste(min(one_county$county), "County", min(one_county$state)),
     subtitle = max(one_county$date),
@@ -99,6 +99,8 @@ one_county %>%
   theme(
     #legend.position="none"
   )
+
+dpi=100
 img_name <- "one-county-hosp-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
