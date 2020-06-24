@@ -7,6 +7,7 @@ library(changepoint)
 library(dplyr)
 library(tidyr)
 library(RcppRoll)
+library(ggthemes)
 
 one_tsa <- tsa_hosp %>% 
   mutate(sequence = as.numeric(date)) %>%
@@ -76,14 +77,14 @@ one_tsa %>%
   ggplot() +
   geom_rect(data = segment_tib, aes(xmin = xmin, xmax=xmax, fill = as.factor(shade)), ymin=0, ymax=Inf, color=NA) +
   scale_fill_manual(guide=FALSE, values = c("#eeeeee", "#e0e0e0")) +
-  geom_line(aes(x=date, y=count, color=type)) +
+  geom_line(aes(x=date, y=count, color=type), size=1.5) +
   scale_color_manual(NULL,values = c("gray", "black"), labels = c("Daily", "7-day average")) +
-  geom_point(data = highpoints, aes(x=date, y=hosp_ct), shape=1, color="black") +
+  geom_point(data = highpoints, aes(x=date, y=hosp_ct), shape=1, color="black", size=3) +
   labs(
-    title = paste(min(one_tsa$tsa_id),min(one_tsa$tsa_name.y), sep="-"),
+    title = paste(min(one_tsa$tsa_id),min(one_tsa$tsa_name.x), sep="-"),
     subtitle = max(one_tsa$date),
     caption = str_wrap("Shading shows break points in data, circles are new highpoints",60),
-    y = "Hospitalizations",
+    y = "Current Hospitalizations",
     x = "Date"
   ) + theme_few() +
   theme(
