@@ -4,6 +4,7 @@ library(hrbrthemes)
 library(ggthemes)
 library(lubridate)
 library(Cairo)
+library(patchwork)
 devtools::load_all("./covidutil/")
 
 images <- list()
@@ -102,7 +103,7 @@ covid_sla <- covid_sl %>%
 my_pal <- c(ipsum_pal()(9), few_pal()(8), colorblind_pal()(8))
 
 # and plot the deaths by raw death count
-covid_sla %>%
+death_area <- covid_sla %>%
   ggplot(aes(x=date, y=mean_7, fill=top_by_deaths)) + geom_area(color=NA) +
   theme_modern_rc() +
   scale_fill_manual("States", values = my_pal) +
@@ -113,10 +114,10 @@ covid_sla %>%
     caption = max(covid_sla$date)
   )
 dpi <- 100
-ggsave("deaths-area-7day-ma.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
+ggsave(plot=death_area, "deaths-area-7day-ma.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
 img_name <- "deaths-area-7day-ma-wide.png"
-ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+ggsave(plot=death_area, img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
 images <- c(images, img_name)
 
@@ -134,7 +135,7 @@ covid_sla <- covid_sl %>%
          mean_7 = roll_mean(delta_c, 7, fill=0, align="right"))
 
 
-covid_sla %>%
+cases_area <- covid_sla %>%
   ggplot(aes(x=date, y=mean_7, fill=top_by_cases)) + geom_area(color=NA) +
   theme_modern_rc() +
   scale_fill_manual("States", values = my_pal) +
@@ -145,10 +146,10 @@ covid_sla %>%
     caption = max(covid_sla$date)
   )
 dpi <- 100
-ggsave("cases-area-7day-ma.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
+ggsave(plot=cases_area, "cases-area-7day-ma.png", width = 850 / dpi, height = 1000/dpi , dpi=dpi, type = "cairo")
 
 img_name <- "cases-area-7day-ma-wide.png"
-ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+ggsave(plot=cases_area, img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
 images <- c(images, img_name)
 
@@ -342,17 +343,26 @@ img_name <- "cases-cor-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
 images <- c(images, img_name)
+# 
+# scp100k %>% group_by(state) %>% arrange(date) %>%
+#   mutate(week_ago = lag(ranking,7), delta = lag(ranking, 7)- ranking) %>% 
+#   ungroup() %>%
+#   filter(date==max(date)) %>% arrange(desc(delta)) %>% view()
+# 
+# 
+# sdp100k %>% group_by(state) %>% arrange(date) %>%
+#   mutate(week_ago = lag(ranking,7), delta = lag(ranking, 7)- ranking) %>% 
+#   ungroup() %>%
+#   filter(date==max(date)) %>% arrange(desc(delta)) %>% view()
 
-scp100k %>% group_by(state) %>% arrange(date) %>%
-  mutate(week_ago = lag(ranking,7), delta = lag(ranking, 7)- ranking) %>% 
-  ungroup() %>%
-  filter(date==max(date)) %>% arrange(desc(delta)) %>% view()
+stacked <- cases_area / death_area
 
+img_name <- "stacked_area.png"
+ggsave(plot=stacked, img_name, width = 16, height = 18 , dpi=dpi, type = "cairo")
 
-sdp100k %>% group_by(state) %>% arrange(date) %>%
-  mutate(week_ago = lag(ranking,7), delta = lag(ranking, 7)- ranking) %>% 
-  ungroup() %>%
-  filter(date==max(date)) %>% arrange(desc(delta)) %>% view()
+images <- c(images, img_name)
+
 
 covidutil::gauth(email= "schneeman@gmail.com")
 images %>% map(covidutil::upload_images)
+
