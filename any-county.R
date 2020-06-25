@@ -3,14 +3,18 @@ library(tidybayes)
 library(changepoint)
 library(dplyr)
 library(tidyr)
+library(lubridate)
 library(readr)
+library(ggthemes)
+library(ggplot2)
+library(stringr)
 library(RcppRoll)
 
 counties <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
 
-state <- counties %>% filter(state == "Oklahoma")
+state <- counties %>% filter(state == "Arizona")
 
-one_county <- state %>% filter(county == "Tulsa")
+one_county <- state %>% filter(county == "Maricopa")
 
 one_county <- one_county %>% 
   mutate(sequence = as.numeric(date)) %>%
