@@ -17,7 +17,7 @@ devtools::load_all("./covidutil/")
 # get a big palette to allow for lots of layers - this gives a quick way to
 # select "top 8, 10, 15, ..." up to "top 24" (because one color is reserved for
 # the "Other" group)
-my_pal <- c(ipsum_pal()(9), few_pal()(8), colorblind_pal()(8))
+#covid_pal <- c(ipsum_pal()(9), few_pal()(8), colorblind_pal()(8))
 
 images <- list()
 
@@ -131,10 +131,10 @@ tsa_pad %>%
   geom_line(aes(color=tsa_name), size=1.1) +
   scale_y_reverse() +
   scale_color_viridis_d(option = "plasma", begin=0.4) +
-  geom_text(data = lhs, aes(label=tsa_name), x= min(tsa_pad$date) - days(3),
+  geom_text(data = lhs, aes(label=tsa_name.x), x= min(tsa_pad$date) - days(3),
             hjust = 1,
             size = 3.5) +
-  geom_text(data = rhs, aes(label=tsa_name), x= max(tsa_pad$date) + days(1),
+  geom_text(data = rhs, aes(label=tsa_name.x), x= max(tsa_pad$date) + days(1),
             hjust = 0,
             size = 3.5) +
   theme_modern_rc() +
@@ -158,7 +158,7 @@ ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 images <- c(images, img_name)
 
 hosp_per <- tsa_pad %>% ggplot(aes(x=date, y=hosp_per_100k)) +
-  geom_line(color=my_pal[11], size=1.2) + 
+  geom_line(color=covid_pal[11], size=1.2) + 
   scale_y_continuous(labels = scales::number_format(accuracy = 1)) +
   facet_wrap(~tsa_name.x, ncol = 4, scales = "free_y") +
   theme_modern_rc() +
@@ -183,7 +183,7 @@ ggsave(img_name, plot=hosp_per, width = 16, height = 9 , dpi=dpi, type = "cairo"
 images <- c(images, img_name)
 
 hosp_ct <- tsa_pad %>% ggplot(aes(x=date, y=hosp_ct)) +
-  geom_line(color=my_pal[11], size = 1.2) + 
+  geom_line(color=covid_pal[11], size = 1.2) + 
   scale_y_continuous(labels = scales::number_format(accuracy = 1)) +
   facet_wrap(~tsa_name.x, ncol = 4, scales = "free_y") +
   theme_modern_rc() +
@@ -191,7 +191,7 @@ hosp_ct <- tsa_pad %>% ggplot(aes(x=date, y=hosp_ct)) +
     legend.position = "none"
   ) +
   labs(
-    title = "Hospitalization Counts per Day due to COVID-19",
+    title = "Hospitalization Occupancy per Day due to COVID-19",
     subtitle = "Trauma Service Areas",
     y = "Current Hospitalizations",
     caption = max(tsa_pad$date)
@@ -208,7 +208,7 @@ ggsave(img_name, plot=hosp_ct, width = 16, height = 9 , dpi=dpi, type = "cairo")
 images <- c(images, img_name)
 
 hosp_pct <- tsa_pad %>% ggplot(aes(x=date, y=hosp_cap)) +
-  geom_line(color = my_pal[11], size = 1.2) + 
+  geom_line(color = covid_pal[11], size = 1.2) + 
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   facet_wrap(~tsa_name.x, ncol = 4, ) +
   theme_modern_rc() +
