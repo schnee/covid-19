@@ -93,3 +93,4 @@ one_tsa %>%
 img_name <- "one-tsa-hosp-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
+covidutil::upload_images(img_name)
