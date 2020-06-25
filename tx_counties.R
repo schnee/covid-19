@@ -5,11 +5,19 @@ library(readxl)
 library(tidyr)
 library(dplyr)
 library(httr)
+library(purrr)
 library(lubridate)
 library(stringr)
 library(ggplot2)
+library(ggthemes)
 library(hrbrthemes)
+library(patchwork)
 devtools::load_all("./covidutil/")
+
+# get a big palette to allow for lots of layers - this gives a quick way to
+# select "top 8, 10, 15, ..." up to "top 24" (because one color is reserved for
+# the "Other" group)
+my_pal <- c(ipsum_pal()(9), few_pal()(8), colorblind_pal()(8))
 
 images <- list()
 
@@ -149,59 +157,85 @@ ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
 images <- c(images, img_name)
 
-tsa_pad %>% ggplot(aes(x=date, y=hosp_per_100k)) +
-  geom_line(aes(color = tsa_name)) + 
-  facet_wrap(~tsa_name, ncol = 4) +
-  ggthemes::theme_few() +
-  #theme_modern_rc() +
+hosp_per <- tsa_pad %>% ggplot(aes(x=date, y=hosp_per_100k)) +
+  geom_line(color=my_pal[11], size=1.2) + 
+  scale_y_continuous(labels = scales::number_format(accuracy = 1)) +
+  facet_wrap(~tsa_name.x, ncol = 4, scales = "free_y") +
+  theme_modern_rc() +
   theme(
     legend.position = "none"
   ) +
   labs(
     title = "Hospitalizations per 100k per Day",
     subtitle = "Trauma Service Areas",
+    y = "Current Hospitalizations per 100k", 
     caption = max(tsa_pad$date)
+  )   +
+  theme(
+    strip.text = element_text(color = "white"),
+    axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),
+    axis.text.y = element_text(size=8)
   )
 
 img_name <- "tsa-hosp-per100k-wide.png"
-ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+ggsave(img_name, plot=hosp_per, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
 images <- c(images, img_name)
 
-tsa_pad %>% ggplot(aes(x=date, y=hosp_ct)) +
-  geom_line(aes(color = tsa_name)) + facet_wrap(~tsa_name.y, ncol = 4, scales = "free") +
-  #theme_modern_rc() +
-  ggthemes::theme_few() +
+hosp_ct <- tsa_pad %>% ggplot(aes(x=date, y=hosp_ct)) +
+  geom_line(color=my_pal[11], size = 1.2) + 
+  scale_y_continuous(labels = scales::number_format(accuracy = 1)) +
+  facet_wrap(~tsa_name.x, ncol = 4, scales = "free_y") +
+  theme_modern_rc() +
   theme(
     legend.position = "none"
   ) +
   labs(
     title = "Hospitalization Counts per Day due to COVID-19",
     subtitle = "Trauma Service Areas",
+    y = "Current Hospitalizations",
     caption = max(tsa_pad$date)
+  )  +
+  theme(
+    strip.text = element_text(color = "white"),
+    axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),
+    axis.text.y = element_text(size=8)
   )
 
 img_name <- "tsa-hosp-ct-wide.png"
-ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+ggsave(img_name, plot=hosp_ct, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
 images <- c(images, img_name)
 
-tsa_pad %>% ggplot(aes(x=date, y=hosp_cap)) +
-  geom_line(aes(color = tsa_name)) + 
-  scale_y_continuous(labels = scales::percent) +
-  facet_wrap(~tsa_name.y, ncol = 4) +
-  #theme_modern_rc() +
-  ggthemes::theme_few() +
+hosp_pct <- tsa_pad %>% ggplot(aes(x=date, y=hosp_cap)) +
+  geom_line(color = my_pal[11], size = 1.2) + 
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  facet_wrap(~tsa_name.x, ncol = 4, ) +
+  theme_modern_rc() +
+  #ggthemes::theme_few() +
   theme(
     legend.position = "none"
   ) +
   labs(
-    title = "Hospitalization % Beds due to COVID-19 ",
+    title = "COVID-19 Hospital Bed Usage",
     subtitle = "Trauma Service Areas",
+    y = "Current Beds as Percent of Total",
     caption = max(tsa_pad$date)
+  ) +
+  theme(
+    strip.text = element_text(color = "white"),
+    axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)
   )
+
 img_name <- "tsa-hosp-cap-wide.png"
-ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+ggsave(img_name, plot = hosp_pct, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+images <- c(images, img_name)
+
+stacked_hosp <- hosp_ct / hosp_per / hosp_pct
+
+img_name <- "tsa_stacked_hosp.png"
+ggsave(img_name, plot = stacked_hosp, width = 16, height = 27 , dpi=dpi, type = "cairo")
 
 images <- c(images, img_name)
 
