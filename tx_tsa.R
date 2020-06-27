@@ -144,7 +144,7 @@ tsa_pad %>%
     legend.position = "none"
   ) +
   labs(
-    title = "Hospitalizations per 100k per Day",
+    title = "Hospital Occupancy Rankings per 100k per Day",
     subtitle = "TSA relative rankings",
     caption = max(tsa_pad$date)
   ) +
@@ -160,15 +160,15 @@ images <- c(images, img_name)
 hosp_per <- tsa_pad %>% ggplot(aes(x=date, y=hosp_per_100k)) +
   geom_line(color=covid_pal[11], size=1.2) + 
   scale_y_continuous(labels = scales::number_format(accuracy = 1)) +
-  facet_wrap(~tsa_name.x, ncol = 4, scales = "free_y") +
+  facet_wrap(~tsa_name.x, ncol = 4) +
   theme_modern_rc() +
   theme(
     legend.position = "none"
   ) +
   labs(
-    title = "Hospitalizations per 100k per Day",
+    title = "Hospital Occupancy per 100k per day",
     subtitle = "Trauma Service Areas",
-    y = "Current Hospitalizations per 100k", 
+    y = "Hospital Occupancy per 100k", 
     caption = max(tsa_pad$date)
   )   +
   theme(
@@ -191,9 +191,9 @@ hosp_ct <- tsa_pad %>% ggplot(aes(x=date, y=hosp_ct)) +
     legend.position = "none"
   ) +
   labs(
-    title = "Hospitalization Occupancy per Day due to COVID-19",
+    title = "Hospital Occupancy per Day due to COVID-19",
     subtitle = "Trauma Service Areas",
-    y = "Current Hospitalizations",
+    y = "Hospital Occupancy",
     caption = max(tsa_pad$date)
   )  +
   theme(
@@ -219,7 +219,7 @@ hosp_pct <- tsa_pad %>% ggplot(aes(x=date, y=hosp_cap)) +
   labs(
     title = "COVID-19 Hospital Bed Usage",
     subtitle = "Trauma Service Areas",
-    y = "Current Beds as Percent of Total",
+    y = "COVID-19 Beds as Percent of Total Available Beds",
     caption = max(tsa_pad$date)
   ) +
   theme(
@@ -238,6 +238,59 @@ img_name <- "tsa_stacked_hosp.png"
 ggsave(img_name, plot = stacked_hosp, width = 16, height = 27 , dpi=dpi, type = "cairo")
 
 images <- c(images, img_name)
+
+
+tsa_hosp <- tsa_hosp %>%
+  mutate(curr_hosp_per_100k = hosp_ct / (population / 1e5)) %>%
+  group_by(tsa_id) %>%
+  mutate(
+    cummax = cummax(curr_hosp_per_100k),
+    is_highpoint = (cummax == curr_hosp_per_100k)
+  ) %>%
+  ungroup()
+
+ordered_by_last_highpoint <- tsa_hosp %>%
+  group_by(tsa_id) %>%
+  filter(is_highpoint) %>% top_n(1, wt = date) %>%
+  select(tsa_id, date, curr_hosp_per_100k, tsa_name.x) %>%
+  arrange(desc(date), desc(curr_hosp_per_100k), tsa_id)
+
+ranked_tsa_ridges <- tsa_hosp %>%
+  mutate(
+    tsa_id = factor(
+      tsa_id,
+      levels = ordered_by_last_highpoint$tsa_id,
+      labels = ordered_by_last_highpoint$tsa_name.x
+    )
+  ) %>%
+  ggplot(aes(
+    x = date,
+    y = tsa_id,
+    height = curr_hosp_per_100k,
+    group = tsa_id
+  )) +
+  geom_ridgeline(
+    aes(fill = tsa_id),
+    scale = 0.05,
+    alpha = 0.5,
+    show.legend = FALSE
+  ) +
+  scale_fill_manual(NULL, values = covid_pal) +
+  theme_modern_rc() +
+  labs(title = "Current hospital beds per 100k residents per TSA",
+       caption = "Ordered by date of most recent peak, beds / 100k",
+       y = "Trauma Service Area")   +
+  theme(axis.text.x = element_text(
+    angle = 45,
+    vjust = 1,
+    hjust = 1
+  ))
+
+img_name <- "tsa_ranked_ridges.png"
+ggsave(img_name, plot = ranked_tsa_ridges, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+images <- c(images, img_name)
+
 
 covidutil::gauth(email= "schneeman@gmail.com")
 images %>% map(covidutil::upload_images)
