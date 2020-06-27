@@ -50,7 +50,9 @@ covid_state <- covid_state %>%
   group_by(fips) %>% 
   arrange(date) %>%
   mutate(daily_cases = replace_na(cases - lag(cases),0),
-         daily_deaths = replace_na(deaths - lag(deaths),0))%>%
+         daily_deaths = replace_na(deaths - lag(deaths),0))%>% 
+  mutate(daily_cases_per_100k = daily_cases / (POPESTIMATE2019 / 100000),
+         daily_deaths_per_100k = daily_deaths / (POPESTIMATE2019 / 100000)) %>%
   ungroup() %>%
   select(-density)
 
