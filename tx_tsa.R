@@ -261,8 +261,9 @@ ranked_tsa_ridges <- tsa_hosp %>%
       tsa_id,
       levels = ordered_by_last_highpoint$tsa_id,
       labels = ordered_by_last_highpoint$tsa_name.x
-    )
-  ) %>%
+    ),
+    shade = as.factor(as.numeric(tsa_id) %% 2)
+  ) %>% 
   ggplot(aes(
     x = date,
     y = tsa_id,
@@ -270,25 +271,22 @@ ranked_tsa_ridges <- tsa_hosp %>%
     group = tsa_id
   )) +
   geom_ridgeline(
-    aes(fill = tsa_id),
+    aes(fill = shade),
     colour = "#909090",
-    scale = 0.075,
-    alpha = 0.5,
+    scale = 0.09,
+    alpha = 0.75,
     show.legend = FALSE
   ) +
-  scale_fill_manual(NULL, values = covid_pal) +
+  scale_fill_manual(NULL, values = c(covid_pal[10], covid_pal[11])) +
   theme_modern_rc() +
-  labs(title = "Current C-19 hospital beds per 100k residents per TSA",
-       caption = "Ordered by date of most recent peak, beds / 100k",
+  labs(title = "COVID-19 hospital beds per 100k residents",
+       caption = "Ordered by date of most recent peak, occupied beds / 100k",
        y = "Trauma Service Area")   +
-  theme(axis.text.x = element_text(
-    angle = 45,
-    vjust = 1,
-    hjust = 1
-  ))
+  theme(axis.text.x = element_text(angle = 45, vjust = 1,hjust = 1),
+        axis.text.y = element_text(vjust = 0))
 
 img_name <- "tsa_ranked_ridges.png"
-ggsave(img_name, plot = ranked_tsa_ridges, width = 12, height = 9 , dpi=dpi, type = "cairo")
+ggsave(img_name, plot = ranked_tsa_ridges, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
 images <- c(images, img_name)
 
