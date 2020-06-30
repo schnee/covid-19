@@ -87,6 +87,7 @@ crazy_plot <- covid_longer_j %>%
                    direction="both", 
                    hjust = 1, size = 2.5,
                    segment.alpha= 0.5,
+                   segment.color = "white",
                    box.padding = 1,
                    xlim = c(min(covid_case_longer$date), today() - days(20)),
                    ylim = c(100, max(covid_case_longer$infections)),
