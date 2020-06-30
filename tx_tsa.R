@@ -12,13 +12,11 @@ library(ggplot2)
 library(ggthemes)
 library(hrbrthemes)
 library(patchwork)
+library(ggridges)
+library(ggrepel)
 devtools::load_all("./covidutil/")
 
-# get a big palette to allow for lots of layers - this gives a quick way to
-# select "top 8, 10, 15, ..." up to "top 24" (because one color is reserved for
-# the "Other" group)
-#covid_pal <- c(ipsum_pal()(9), few_pal()(8), colorblind_pal()(8))
-
+# begin a list of images to upload to google
 images <- list()
 
 # yay, parse Wikipedia tables - that's sure to be maintenance free....
@@ -28,13 +26,13 @@ page <- read_html(url)
 
 tables <- html_table(html_nodes(page, css ="table.wikitable.sortable"), fill=TRUE)
 
-# on 2020 06 10, the wiki page consisted of only one table with that css selector,
-# and that selector selected the counties table. Let's assert that to be safe
+# on 2020 06 10, the wiki page consisted of only one table with that css
+# selector, and that selector selected the counties table. Let's assert that to
+# be safe
 stopifnot(length(tables) == 1)
 
-# and now convert the formerly readable friendly content to 
-# machine friendly content, and drop columns that we don't
-# care about at this point in time
+# and now convert the formerly readable friendly content to machine friendly
+# content, and drop columns that we don't care about at this point in time
 
 counties <- tables[[1]] %>% clean_names() %>%
   mutate(county = str_remove(county, "\\s+\\w+$")) %>%
@@ -158,7 +156,7 @@ ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 images <- c(images, img_name)
 
 hosp_per <- tsa_pad %>% ggplot(aes(x=date, y=hosp_per_100k)) +
-  geom_line(color=covid_pal[11], size=1.2) + 
+  geom_line(color=covid_pal[23], size=1.2) + 
   scale_y_continuous(labels = scales::number_format(accuracy = 1)) +
   facet_wrap(~tsa_name.x, ncol = 4) +
   theme_modern_rc() +
@@ -183,7 +181,7 @@ ggsave(img_name, plot=hosp_per, width = 16, height = 9 , dpi=dpi, type = "cairo"
 images <- c(images, img_name)
 
 hosp_ct <- tsa_pad %>% ggplot(aes(x=date, y=hosp_ct)) +
-  geom_line(color=covid_pal[11], size = 1.2) + 
+  geom_line(color=covid_pal[23], size = 1.2) + 
   scale_y_continuous(labels = scales::number_format(accuracy = 1)) +
   facet_wrap(~tsa_name.x, ncol = 4, scales = "free_y") +
   theme_modern_rc() +
@@ -208,7 +206,7 @@ ggsave(img_name, plot=hosp_ct, width = 16, height = 9 , dpi=dpi, type = "cairo")
 images <- c(images, img_name)
 
 hosp_pct <- tsa_pad %>% ggplot(aes(x=date, y=hosp_cap)) +
-  geom_line(color = covid_pal[11], size = 1.2) + 
+  geom_line(color = covid_pal[23], size = 1.2) + 
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   facet_wrap(~tsa_name.x, ncol = 4, ) +
   theme_modern_rc() +
@@ -245,7 +243,8 @@ tsa_hosp <- tsa_hosp %>%
   group_by(tsa_id) %>%
   mutate(
     cummax = cummax(curr_hosp_per_100k),
-    is_highpoint = (cummax == curr_hosp_per_100k)
+    is_highpoint = (cummax == curr_hosp_per_100k),
+    is_highest_high = factor(curr_hosp_per_100k == max(curr_hosp_per_100k))
   ) %>%
   ungroup()
 
@@ -254,6 +253,19 @@ ordered_by_last_highpoint <- tsa_hosp %>%
   filter(is_highpoint) %>% top_n(1, wt = date) %>%
   select(tsa_id, date, curr_hosp_per_100k, tsa_name.x) %>%
   arrange(desc(date), desc(curr_hosp_per_100k), tsa_id)
+
+highpoints <- tsa_hosp %>%
+  filter(is_highest_high == TRUE) %>% 
+  arrange(desc(date)) %>%
+  distinct(tsa_id, .keep_all = TRUE) %>%
+  mutate(
+    tsa_id = factor(
+      tsa_id,
+      levels = ordered_by_last_highpoint$tsa_id,
+      labels = ordered_by_last_highpoint$tsa_name.x
+    ))
+
+scale_factor = 0.1
 
 ranked_tsa_ridges <- tsa_hosp %>%
   mutate(
@@ -273,18 +285,32 @@ ranked_tsa_ridges <- tsa_hosp %>%
   geom_ridgeline(
     aes(fill = shade),
     colour = "#909090",
-    scale = 0.09,
+    scale = scale_factor,
     alpha = 0.75,
     show.legend = FALSE
   ) +
-  scale_fill_manual(NULL, values = c(covid_pal[10], covid_pal[11])) +
+  scale_fill_manual(NULL, values = c(covid_pal[22], covid_pal[23])) +
+  geom_point(aes(y=as.numeric(tsa_id) + curr_hosp_per_100k * scale_factor, x=date, 
+                 shape = is_highest_high, color = shade), 
+             stroke = 1,
+             show.legend = FALSE) +
+  scale_color_manual(NULL, values = c(covid_pal[22], covid_pal[23])) +
+  scale_shape_manual(NULL, values = c(NA,1)) + # no shape if not a high point
+  geom_label_repel(data = highpoints, aes(x=date, y=as.numeric(tsa_id) + curr_hosp_per_100k * scale_factor,
+                       label = paste0(round(curr_hosp_per_100k, digits = 0)," (",hosp_ct,")")), 
+                   size = 4,
+                  color = "black",
+                  xlim = c(min(tsa_hosp$date), max(tsa_hosp$date) - days(5)),
+                  segment.color = "white") +
   theme_modern_rc() +
   labs(title = "COVID-19 hospital beds occupied per 100k residents",
-       caption = "Ordered by date of most recent peak, occupied beds / 100k",
+       caption = paste("Ordered by date of most recent peak, occupied beds / 100k",
+       "Label X (Y): Beds per 100k (raw count) at highpoint",
+       max(tsa_hosp$date),sep='\n'),
        y = "Trauma Service Area")   +
   theme(axis.text.x = element_text(angle = 45, vjust = 1,hjust = 1),
         axis.text.y = element_text(vjust = 0))
-
+ranked_tsa_ridges
 img_name <- "tsa_ranked_ridges.png"
 ggsave(img_name, plot = ranked_tsa_ridges, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
