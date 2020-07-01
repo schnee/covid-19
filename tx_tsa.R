@@ -76,23 +76,24 @@ GET(dshs_hosp_url, write_disk(tf <- tempfile(fileext = ".xlsx", tmpdir="./data")
 tsa_hosp_w <- read_excel(tf, skip = 2)
 unlink(tf)
 
-tsa_hosp_w <- tsa_hosp_w %>% filter(!is.na(`TSA ID`))
+tsa_hosp_w <- tsa_hosp_w %>% filter(!is.na(`TSA ID`)) %>%
+  filter(`TSA ID` != "Total")
 
-# It is a wide data frame, we need to make it long. The way the excel file is
-# formatted confuses read_excel and the column headers that are Dates in excel
-# look like "4/8" instead of "4/8/2020" even though the year is part of the
-# cell content. Somehow readxl doesn't like that. This data begins on 4/8
-# and the "origin" of the date-based sequence is 1899-12-30 for Excel, so
-# use it. Also strip of the trailing period from the TSA ID. ANd just because
+stopifnot(nrow(tsa_hosp_w) != 23)
+
+# It is a wide data frame, we need to make it long. The Great State of Texas
+# makes the column headers unfriendly, sort of. "Hosptialization 4/8" etc, so we
+# need to remove the text, turn it into a string date and then convert to a
+# Date. Also strip of the trailing period from the TSA ID. ANd just because
 # we're ready to, join in the TSA demo data
 
 tsa_hosp <- tsa_hosp_w %>%
   pivot_longer(cols = !starts_with("TSA"), 
                names_to="sequence",
                values_to="hosp_ct") %>% 
-  clean_names() %>%
-  mutate(sequence = as.numeric(sequence)) %>%
-  mutate(date = as.Date(sequence, origin = "1899-12-30")) %>%
+  clean_names() %>%mutate(sequence = str_remove(sequence, "Hospitalizations "), 
+                          sequence = paste0(sequence, "/2020"), 
+                          date = mdy(sequence)) %>%
   mutate(tsa_id = str_remove(tsa_id, "[\\W]")) %>%
   select(-sequence) %>%
   left_join(tsa, by = c("tsa_id" = "tsa")) %>%
