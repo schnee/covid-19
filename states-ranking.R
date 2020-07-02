@@ -365,6 +365,80 @@ ggsave(plot=stacked, img_name, width = 16, height = 18 , dpi=dpi, type = "cairo"
 images <- c(images, img_name)
 
 
+#
+# Generate a ridge plot for the states ordered by date of most recent
+#
+
+# filter down to the top_n by cases. note, here I'm just using them all
+# as the visual is tested
+
+tops <- covid_state %>% 
+  filter(date == max(date)) %>%
+  top_n(n_distinct(state), wt = cases) 
+
+# calculate delta cases and rolling means and then find the high points
+csla <- covid_state %>% 
+  filter(state %in% tops$state) %>%
+  group_by(state) %>%
+  arrange(date) %>%
+  mutate( delta_c = cases - lag(cases),
+          mean_7 = roll_mean(delta_c, n = 7, fill=0, align ="right")) %>%
+  ungroup() %>%   replace_na(list(mean_7 = 0)) %>%
+  group_by(state) %>%
+  mutate(
+    cummax = cummax(mean_7),
+    is_highpoint = (cummax == mean_7),
+    is_highest_high = factor(mean_7 == max(mean_7))
+  ) %>%
+  ungroup()
+
+# define the ordering for the plot, based on highpoint date
+ordered_by_last_highpoint <- csla %>%
+  group_by(state) %>%
+  filter(is_highpoint) %>% top_n(1, wt = date) %>%
+  #  select(top_by_cases, date, mean_7) %>%
+  arrange(desc(date), desc(mean_7), desc(state))
+
+scale_factor <- 0.003
+
+csla  %>% 
+  mutate(
+    state = factor(
+      state,
+      levels = ordered_by_last_highpoint$state,
+      labels = ordered_by_last_highpoint$state
+    ),
+    shade = as.factor(as.numeric(state) %% 2)
+  ) %>%
+  ggplot(aes(x=date, y=state, height = mean_7, group=state)) + 
+  geom_ridgeline(aes(fill = shade), alpha = 0.4, scale= scale_factor, show.legend = FALSE) +
+  scale_fill_manual(NULL, values = c(covid_pal[22], covid_pal[23])) +
+  geom_point(aes(y=as.numeric(state) + mean_7 * scale_factor, x=date, 
+                 shape = is_highest_high, color = shade), 
+             stroke = 1,
+             show.legend = FALSE) +
+  scale_color_manual(NULL, values = c(covid_pal[22], covid_pal[23])) +
+  scale_shape_manual(NULL, values = c(NA,1)) + # no shape if not a high point
+  theme_modern_rc() +
+  labs(
+    title = paste("7 day moving average of cases for top",
+                  nrow(tops),
+                  "States and Territories"),
+    subtitle = "Ordered by date of last peak, peak value",
+    y= "State"
+  ) +
+  theme(
+    axis.text.y = element_text(size = 8)
+  ) +
+  xlim(ymd("2020-03-01", max(csla$date)))
+
+dpi <- 100
+
+img_name <- "top-20-states-wide.png"
+ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+
+images <- c(images, img_name)
+
 covidutil::gauth(email= "schneeman@gmail.com")
 images %>% map(covidutil::upload_images)
 
