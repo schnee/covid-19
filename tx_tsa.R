@@ -253,7 +253,7 @@ ordered_by_last_highpoint <- tsa_hosp %>%
   group_by(tsa_id) %>%
   filter(is_highpoint) %>% top_n(1, wt = date) %>%
   select(tsa_id, date, curr_hosp_per_100k, tsa_name.x) %>%
-  arrange(desc(date), desc(curr_hosp_per_100k), tsa_id)
+  arrange(date, curr_hosp_per_100k, tsa_id)
 
 highpoints <- tsa_hosp %>%
   filter(is_highest_high == TRUE) %>% 
