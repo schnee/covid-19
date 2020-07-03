@@ -397,7 +397,7 @@ ordered_by_last_highpoint <- csla %>%
   group_by(state) %>%
   filter(is_highpoint) %>% top_n(1, wt = date) %>%
   #  select(top_by_cases, date, mean_7) %>%
-  arrange(desc(date), desc(mean_7), desc(state))
+  arrange(date, mean_7, state)
 
 scale_factor <- 0.003
 
@@ -411,7 +411,8 @@ csla  %>%
     shade = as.factor(as.numeric(state) %% 2)
   ) %>%
   ggplot(aes(x=date, y=state, height = mean_7, group=state)) + 
-  geom_ridgeline(aes(fill = shade), alpha = 0.4, scale= scale_factor, show.legend = FALSE) +
+  geom_ridgeline(aes(fill = shade), color="white", alpha = 0.4, size =.1,
+                 scale= scale_factor, show.legend = FALSE) +
   scale_fill_manual(NULL, values = c(covid_pal[22], covid_pal[23])) +
   geom_point(aes(y=as.numeric(state) + mean_7 * scale_factor, x=date, 
                  shape = is_highest_high, color = shade), 
