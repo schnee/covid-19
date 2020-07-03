@@ -435,7 +435,7 @@ csla  %>%
 
 dpi <- 100
 
-img_name <- "top-20-states-wide.png"
+img_name <- "top-states-ridges-wide.png"
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
 images <- c(images, img_name)
