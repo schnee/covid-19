@@ -62,10 +62,10 @@ covid_state <- covid_state %>%
 top_count <- 10
 
 top_by_deaths_tib <- covid_state %>% filter(date == max(date)) %>%
-  top_n(top_count, wt = deaths) %>% arrange(desc(deaths))
+  top_n(top_count, wt = deaths) %>% arrange(desc(daily_deaths))
 
 top_by_cases_tib <- covid_state %>% filter(date == max(date)) %>%
-  top_n(top_count, wt = cases) %>% arrange(desc(cases))
+  top_n(top_count, wt = cases) %>% arrange(desc(daily_cases))
 
 top_by_deaths_per_100k_tib <- covid_state %>% filter(date == max(date)) %>%
   top_n(top_count, wt = deaths_per_100k) %>% arrange(desc(deaths_per_100k))
