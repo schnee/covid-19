@@ -77,7 +77,8 @@ tsa_hosp_w <- read_excel(tf, skip = 2)
 unlink(tf)
 
 tsa_hosp_w <- tsa_hosp_w %>% filter(!is.na(`TSA ID`)) %>%
-  filter(`TSA ID` != "Total")
+  filter(`TSA ID` != "Total") %>%
+  mutate_at(vars(!starts_with("TSA")), as.numeric)
 
 stopifnot(nrow(tsa_hosp_w) != 23)
 
@@ -91,9 +92,7 @@ tsa_hosp <- tsa_hosp_w %>%
   pivot_longer(cols = !starts_with("TSA"), 
                names_to="sequence",
                values_to="hosp_ct") %>% 
-  clean_names() %>%mutate(sequence = str_remove(sequence, "Hospitalizations "), 
-                          sequence = paste0(sequence, "/2020"), 
-                          date = mdy(sequence)) %>%
+  clean_names() %>% mutate(date = ymd(sequence)) %>%
   mutate(tsa_id = str_remove(tsa_id, "[\\W]")) %>%
   select(-sequence) %>%
   left_join(tsa, by = c("tsa_id" = "tsa")) %>%
@@ -106,9 +105,9 @@ tsa_pad <- tsa_hosp %>%
   bind_rows(tibble(date = seq(from = min(tsa_hosp$date) - days(2), 
                               to = min(tsa_hosp$date) - days(1), 
                               by = "day"))) %>%
-  complete(date, nesting(tsa_id, tsa_name.x, tsa_name.y), fill = list(hosp_ct = 0,
+  complete(date, nesting(tsa_id, tsa_area, tsa_name), fill = list(hosp_ct = 0,
                                                                       hosp_cap = 0)) %>%
-  select(date, tsa_id, tsa_name.x, tsa_name.y, hosp_ct, hosp_cap) %>%
+  select(date, tsa_id, tsa_area, tsa_name, hosp_ct, hosp_cap) %>%
   filter(!is.na(tsa_id)) %>%
   left_join(tsa, by=c("tsa_id" = "tsa")) %>%
   group_by(date) %>%
@@ -125,15 +124,15 @@ rhs <- tsa_pad %>% filter(date == max(date)) %>%
   arrange(ranking)
 
 tsa_pad %>% 
-  mutate(tsa_name = factor(tsa_name, levels = lhs$tsa_name)) %>%
+  mutate(tsa_area = factor(tsa_area, levels = lhs$tsa_area)) %>%
   ggplot(aes(x=date, y=ranking)) + 
-  geom_line(aes(color=tsa_name), size=1.1) +
+  geom_line(aes(color=tsa_area), size=1.1) +
   scale_y_reverse() +
   scale_color_viridis_d(option = "plasma", begin=0.4) +
-  geom_text(data = lhs, aes(label=tsa_name.x), x= min(tsa_pad$date) - days(3),
+  geom_text(data = lhs, aes(label=tsa_area), x= min(tsa_pad$date) - days(3),
             hjust = 1,
             size = 3.5) +
-  geom_text(data = rhs, aes(label=tsa_name.x), x= max(tsa_pad$date) + days(1),
+  geom_text(data = rhs, aes(label=tsa_area), x= max(tsa_pad$date) + days(1),
             hjust = 0,
             size = 3.5) +
   theme_modern_rc() +
@@ -252,7 +251,7 @@ tsa_hosp <- tsa_hosp %>%
 ordered_by_last_highpoint <- tsa_hosp %>%
   group_by(tsa_id) %>%
   filter(is_highpoint) %>% top_n(1, wt = date) %>%
-  select(tsa_id, date, curr_hosp_per_100k, tsa_name.x) %>%
+  select(tsa_id, date, curr_hosp_per_100k, tsa_area) %>%
   arrange(date, curr_hosp_per_100k, tsa_id)
 
 highpoints <- tsa_hosp %>%
@@ -263,7 +262,7 @@ highpoints <- tsa_hosp %>%
     tsa_id = factor(
       tsa_id,
       levels = ordered_by_last_highpoint$tsa_id,
-      labels = ordered_by_last_highpoint$tsa_name.x
+      labels = ordered_by_last_highpoint$tsa_area
     ))
 
 scale_factor = 0.1
@@ -273,7 +272,7 @@ ranked_tsa_ridges <- tsa_hosp %>%
     tsa_id = factor(
       tsa_id,
       levels = ordered_by_last_highpoint$tsa_id,
-      labels = ordered_by_last_highpoint$tsa_name.x
+      labels = ordered_by_last_highpoint$tsa_area
     ),
     shade = as.factor(as.numeric(tsa_id) %% 2)
   ) %>% 
