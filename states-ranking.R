@@ -99,16 +99,11 @@ covid_sla <- covid_sl %>%
   mutate(delta_d = deaths - lag(deaths),
          mean_7 = roll_mean(delta_d, 7, fill=0, align="right"))
 
-# get a big palette to allow for lots of layers - this gives a quick way to
-# select "top 8, 10, 15, ..." up to "top 24" (because one color is reserved for
-# the "Other" group)
-my_pal <- c(ipsum_pal()(9), few_pal()(8), colorblind_pal()(8))
-
 # and plot the deaths by raw death count
 death_area <- covid_sla %>%
   ggplot(aes(x=date, y=mean_7, fill=top_by_deaths)) + geom_area(color=NA) +
   theme_modern_rc() +
-  scale_fill_manual("States", values = my_pal) +
+  scale_fill_manual("States", values = covid_pal) +
   labs(
     title = "COVID-19 Deaths",
     subtitle = "7 day moving average",
@@ -140,7 +135,7 @@ covid_sla <- covid_sl %>%
 cases_area <- covid_sla %>%
   ggplot(aes(x=date, y=mean_7, fill=top_by_cases)) + geom_area(color=NA) +
   theme_modern_rc() +
-  scale_fill_manual("States", values = my_pal) +
+  scale_fill_manual("States", values = covid_pal) +
   labs(
     title = "COVID-19 Cases",
     subtitle = "7 day moving average",
