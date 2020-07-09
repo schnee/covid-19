@@ -116,7 +116,9 @@ covid_longer_j %>% ungroup() %>% arrange(date) %>%
   theme_modern_rc() +
   scale_color_ipsum() +
   labs(
-    title = "US COVID-19 Daily Cases"
+    title = "US COVID-19 Daily Cases",
+    y = "Count",
+    x = "Date"
   )
 
 dpi <- 100
