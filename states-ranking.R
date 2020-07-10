@@ -421,7 +421,8 @@ csla  %>%
                   nrow(tops),
                   "States and Territories"),
     subtitle = "Ordered by date of last peak, peak value",
-    y= "State"
+    y= "State",
+    caption = paste("Data through ", max(csla$date))
   ) +
   theme(
     axis.text.y = element_text(size = 8)
