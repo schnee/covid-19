@@ -286,15 +286,15 @@ ranked_tsa_ridges <- tsa_hosp %>%
     aes(fill = shade),
     colour = "#909090",
     scale = scale_factor,
-    alpha = 0.75,
+    alpha = 0.5,
     show.legend = FALSE
   ) +
-  scale_fill_manual(NULL, values = c(covid_pal[22], covid_pal[23])) +
+  scale_fill_manual(NULL, values = c(covid_pal[12], covid_pal[11])) +
   geom_point(aes(y=as.numeric(tsa_id) + curr_hosp_per_100k * scale_factor, x=date, 
                  shape = is_highest_high, color = shade), 
              stroke = 1,
              show.legend = FALSE) +
-  scale_color_manual(NULL, values = c(covid_pal[22], covid_pal[23])) +
+  scale_color_manual(NULL, values = c(covid_pal[12], covid_pal[11])) +
   scale_shape_manual(NULL, values = c(NA,1)) + # no shape if not a high point
   geom_label_repel(data = highpoints, aes(x=date, y=as.numeric(tsa_id) + curr_hosp_per_100k * scale_factor,
                        label = paste0(round(curr_hosp_per_100k, digits = 0)," (",hosp_ct,")")), 
