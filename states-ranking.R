@@ -5,6 +5,7 @@ library(ggthemes)
 library(lubridate)
 library(Cairo)
 library(patchwork)
+library(ggridges)
 devtools::load_all("./covidutil/")
 
 images <- list()
