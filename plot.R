@@ -58,7 +58,14 @@ casualties <- tribble(
   "Desert Storm", 383,
   "Vince Foster", 1,
   "2017 Las Vegas", 58,
-  "H1N1-2009", 12469
+  "H1N1-2009", 12469,
+  "FLU 2018-2019*", 34157,
+  "FLU 2017-2018*", 61000,
+  "FLU 2016-2017", 38000,
+  "FLU 2015-2016", 23000,
+  "FLU 2015-2015", 51000,
+  "FLU 2013-2014", 38000,
+  "FLU 2012-2013", 43000,
 ) %>% mutate(what = fct_reorder(what, -ct))
 
 crazy_plot <- covid_longer_j %>% 
@@ -99,8 +106,8 @@ crazy_plot <- covid_longer_j %>%
         axis.text.y.right = element_text(color = "red")) +
   geom_rug(data = casualties %>% filter(ct < 3*max(covid_longer_j$deaths)), 
            aes(y=ct*10, color = what), sides="r", size = 2) +
-  scale_color_few(palette = "Dark", "Reference\nCasualties")
-
+  scale_color_manual(values = c(few_pal("Dark")(8), few_pal("Medium")(8)), "Reference\nFatalities")
+  
 img_name <- "covid-crazy.png"
 ggsave(plot = crazy_plot, filename = img_name, width = 16, height=9, dpi = 100, type = "cairo")
 
@@ -153,7 +160,7 @@ covid_longer_j %>%
         axis.text.y.right = element_text(color = "red")) +
   geom_rug(data = casualties %>% filter(ct < 3*max(covid_longer_j$deaths)), 
            aes(y=ct*10, color = what), sides="r", size = 1) +
-  scale_color_few(palette = "Dark", "Reference\nFatalities") +
+  scale_color_manual(values = c(few_pal("Dark")(8), few_pal("Medium")(8)), "Reference\nFatalities") +
   theme(legend.position = "bottom")
 
 dpi <- 100
