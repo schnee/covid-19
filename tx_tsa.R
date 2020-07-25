@@ -77,7 +77,8 @@ tsa_hosp_w <- read_excel(tf, skip = 2)
 unlink(tf)
 
 tsa_hosp_w <- tsa_hosp_w %>% filter(!is.na(`TSA ID`)) %>%
-  filter(`TSA ID` != "Total") %>%
+#  filter(`TSA ID` != "Total") %>%
+  filter(grepl("^[A-V]\\.$",.$`TSA ID`)) %>%
   mutate_at(vars(!starts_with("TSA")), as.numeric)
 
 stopifnot(nrow(tsa_hosp_w) != 23)
