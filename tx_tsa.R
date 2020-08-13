@@ -303,11 +303,12 @@ ranked_tsa_ridges <- tsa_hosp %>%
                   color = "black",
                   xlim = c(min(tsa_hosp$date), max(tsa_hosp$date) - days(5)),
                   segment.color = "white") +
+  geom_vline(xintercept = ymd("20200716"), linetype = 2, color="red")+
   theme_modern_rc() +
   labs(title = "COVID-19 hospital beds occupied per 100k residents",
        caption = paste("Ordered by date of most recent peak, occupied beds / 100k",
        "Label X (Y): Beds per 100k (raw count) at highpoint",
-       max(tsa_hosp$date),sep='\n'),
+       max(tsa_hosp$date, na.rm = TRUE),sep='\n'),
        y = "Trauma Service Area")   +
   theme(axis.text.x = element_text(angle = 45, vjust = 1,hjust = 1),
         axis.text.y = element_text(vjust = 0))
