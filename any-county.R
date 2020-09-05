@@ -9,12 +9,15 @@ library(ggthemes)
 library(ggplot2)
 library(stringr)
 library(RcppRoll)
+library(Cairo)
 
 counties <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
 
-state <- counties %>% filter(state == "Arizona")
+the_state <- "Texas"
+state <- counties %>% filter(state == the_state)
 
-one_county <- state %>% filter(county == "Maricopa")
+the_county <- "Travis"
+one_county <- state %>% filter(county == the_county)
 
 one_county <- one_county %>% 
   mutate(sequence = as.numeric(date)) %>%
@@ -33,7 +36,8 @@ one_county <- one_county %>%
 #    that model in mcp package for more 
 #    thorough search
 
-fit_changepoint = cpt.meanvar(one_county$mean_cases_7, method = "AMOC")
+fit_changepoint = cpt.meanvar(one_county$mean_cases_7, method = "PELT",
+                              minseglen = 21)
 plot(fit_changepoint)
 str(fit_changepoint)
 
@@ -103,6 +107,6 @@ one_county %>%
   )
 
 dpi=100
-img_name <- "one-county-hosp-wide.png"
+img_name <- paste(the_county, the_state, "case-wide.png", sep="-")
 ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
 
