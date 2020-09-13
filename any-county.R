@@ -5,7 +5,7 @@ library(dplyr)
 library(tidyr)
 library(lubridate)
 library(readr)
-library(ggthemes)
+library(hrbrthemes)
 library(ggplot2)
 library(stringr)
 library(RcppRoll)
@@ -80,8 +80,8 @@ plot_county <- function(the_state, the_county, counties=counties) {
   the_plot <- one_county %>%
     pivot_longer(cols = c(mean_cases_7, daily_cases), names_to = "type", values_to = "count") %>%
     ggplot() +
-    geom_rect(data = extract_segments, aes(xmin = xmin, xmax=xmax, fill = as.factor(shade)), ymin=0, ymax=Inf, color=NA) +
-    scale_fill_manual(guide=FALSE, values = c("#eeeeee", "#e0e0e0")) +
+    geom_rect(data = extract_segments, aes(xmin = xmin, xmax=xmax, fill = as.factor(shade)), ymin=0, ymax=Inf, color=NA, alpha=0.5) +
+    scale_fill_manual(guide=FALSE, values = c("white", "#e0e0e0")) +
     geom_line(aes(x=date, y=count, color=type)) +
     scale_color_manual(NULL,values = c("gray", "black"), labels = c("Daily", "7-day average")) +
     geom_point(aes(x=date, y=count, shape = is_highpoint, size = type), color="black", show.legend = FALSE) +
@@ -90,17 +90,17 @@ plot_county <- function(the_state, the_county, counties=counties) {
     labs(
       title = paste(min(one_county$county), "County", min(one_county$state)),
       subtitle = max(one_county$date),
-      caption = str_wrap("Shading shows break points in data, circles are new highpoints",60),
+      caption = str_wrap("Shading shows changes in data, circles are new highpoints",60),
       y = "Cases",
       x = "Date"
-    ) + theme_few() +
+    ) + theme_ipsum_rc() +
     theme(
       #legend.position="none"
     )
   
   dpi=200
   img_name <- paste(the_county, the_state, "case-wide.png", sep="-")
-  agg_png(img_name, width = 1600, height = 900 , res=dpi)
+  agg_png(here::here("county_plots", img_name), width = 1600, height = 900 , res=dpi)
   print(the_plot)
   invisible(dev.off())
   
@@ -118,8 +118,15 @@ extract_segments <- function(one_county) {
 
 my_counties <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
 
-my_state <- "Texas"
-my_county <- "Lubbock"
+tib <- tribble(
+  ~state, ~county,
+  "Washington", "Whitman",
+  "Texas", "Travis", 
+  "Texas", "Lubbock",
+  "Montana", "Lewis and Clark",
+  "Montana", "Yellowstone",
+  "Arizona", "Maricopa"
+)
 
-plot_county(the_state = my_state, the_county = my_county, counties = my_counties)
+purrr::map2(tib$state, tib$county, ~plot_county(.x, .y, counties = my_counties))
 
