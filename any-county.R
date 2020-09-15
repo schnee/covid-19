@@ -12,10 +12,12 @@ library(RcppRoll)
 library(ragg)
 
 
-plot_county <- function(the_state, the_county, counties=counties) {
+plot_county <- function(the_state, the_county, counties=my_counties) {
   
   state <- counties %>% filter(state == the_state)
   one_county <- state %>% filter(county == the_county)
+  
+  print(paste(the_state, the_county, nrow(one_county)))
   
   one_county <- one_county %>% 
     mutate(sequence = as.numeric(date)) %>%
@@ -125,8 +127,23 @@ tib <- tribble(
   "Texas", "Lubbock",
   "Montana", "Lewis and Clark",
   "Montana", "Yellowstone",
-  "Arizona", "Maricopa"
-)
+  "Montana", "Missoula",
+  "Arizona", "Maricopa",
+  "Oregon", "Multnomah",
+  "Massachusetts", "Hampshire", 
+  "Georgia", "Bulloch", 
+  "Mississippi", "Lafayette",
+  "Missouri","Greene",
+  "Illinois", "Champaign",
+  "Colorado", "Summit",
+  "Florida", "Leon",
+  "Oklahoma", "Garfield",
+  "Oklahoma", "Payne",
+  "Oklahoma", "Muskogee",
+  "Iowa", "Story",
+  "Iowa", "Johnson",
+  "North Carolina", "Orange"
+) %>% arrange(state, county)
 
-purrr::map2(tib$state, tib$county, ~plot_county(.x, .y, counties = my_counties))
-
+future::plan(future::multisession, workers = 2)
+furrr::future_map2(tib$state, tib$county, ~plot_county(.x, .y, counties = my_counties))
