@@ -98,7 +98,7 @@ plot_county <- function(the_state, the_county, counties=my_counties) {
     ) + theme_ipsum_rc() +
     theme(
       #legend.position="none"
-    )
+    ) + ylim(0,NA)
   
   dpi=200
   img_name <- paste(the_county, the_state, "case-wide.png", sep="-")
