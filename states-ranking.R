@@ -407,7 +407,7 @@ csla  %>%
     shade = as.factor(as.numeric(state) %% 2)
   ) %>%
   ggplot(aes(x=date, y=state, height = mean_7, group=state)) + 
-  geom_ridgeline(aes(fill = shade), color="white", alpha = 0.4, size =.1,
+  geom_ridgeline(aes(fill = shade, color=shade), alpha = 0.1, size =.2,
                  scale= scale_factor, show.legend = FALSE) +
   scale_fill_manual(NULL, values = c(covid_pal[22], covid_pal[23])) +
   geom_point(aes(y=as.numeric(state) + mean_7 * scale_factor, x=date, 
