@@ -73,7 +73,7 @@ tsa <- counties %>%
 dshs_hosp_url <- "https://dshs.texas.gov/coronavirus/TexasCOVID-19HospitalizationsOverTimebyTSA.xlsx"
 
 GET(dshs_hosp_url, write_disk(tf <- tempfile(fileext = ".xlsx", tmpdir="./data")))
-tsa_hosp_w <- read_excel(tf, skip = 2)
+tsa_hosp_w <- read_excel(tf, skip = 2, sheet = 4)
 unlink(tf)
 
 tsa_hosp_w <- tsa_hosp_w %>% filter(!is.na(`TSA ID`)) %>%
@@ -93,7 +93,8 @@ tsa_hosp <- tsa_hosp_w %>%
   pivot_longer(cols = !starts_with("TSA"), 
                names_to="sequence",
                values_to="hosp_ct") %>% 
-  clean_names() %>% mutate(date = ymd(sequence)) %>%
+  clean_names() %>% 
+  mutate(date = rep(ymd('2020-04-12') + days(seq.int(0,ncol(tsa_hosp_w)-3)),22)) %>%
   mutate(tsa_id = str_remove(tsa_id, "[\\W]")) %>%
   select(-sequence) %>%
   left_join(tsa, by = c("tsa_id" = "tsa")) %>%
@@ -303,7 +304,7 @@ ranked_tsa_ridges <- tsa_hosp %>%
                   color = "black",
                   xlim = c(min(tsa_hosp$date), max(tsa_hosp$date) - days(5)),
                   segment.color = "white") +
-  geom_vline(xintercept = ymd("20200716"), linetype = 2, color="red")+
+  #geom_vline(xintercept = ymd("20200716"), linetype = 2, color="red")+
   theme_modern_rc() +
   labs(title = "COVID-19 hospital beds occupied per 100k residents",
        caption = paste("Ordered by date of most recent peak, occupied beds / 100k",
