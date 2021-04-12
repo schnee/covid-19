@@ -404,17 +404,19 @@ csla  %>%
       levels = ordered_by_last_highpoint$state,
       labels = ordered_by_last_highpoint$state
     ),
-    shade = as.factor(as.numeric(state) %% 2)
+    shade = as.factor(as.numeric(state) %% 3)
   ) %>%
   ggplot(aes(x=date, y=state, height = mean_7, group=state)) + 
   geom_ridgeline(aes(fill = shade, color=shade), alpha = 0.1, size =.2,
                  scale= scale_factor, show.legend = FALSE) +
-  scale_fill_manual(NULL, values = c(covid_pal[22], covid_pal[21])) +
+  scale_fill_manual(NULL, values = c("#00ffff", "#ff00ff", "#ffff00"))+
+  #scale_fill_manual(NULL, values = c(covid_pal[22], covid_pal[21])) +
   geom_point(aes(y=as.numeric(state) + mean_7 * scale_factor, x=date, 
                  shape = is_highest_high, color = shade), 
              stroke = 1,
              show.legend = FALSE) +
-  scale_color_manual(NULL, values = c(covid_pal[22], covid_pal[21])) +
+  scale_color_manual(NULL, values = c("#00ffff", "#ff00ff", "#ffff00"))+
+  #scale_color_manual(NULL, values = c(covid_pal[22], covid_pal[21])) +
   scale_shape_manual(NULL, values = c(NA,1)) + # no shape if not a high point
   theme_modern_rc() +
   labs(
@@ -423,7 +425,8 @@ csla  %>%
                   "States and Territories"),
     subtitle = "Ordered by date of last peak, peak value",
     y= "State",
-    caption = paste("Data through ", max(csla$date))
+    caption = paste("Data through ", max(csla$date), 
+                    "\nState peaks highlighted by marker")
   ) +
   theme(
     axis.text.y = element_text(size = 8)
