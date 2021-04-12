@@ -122,7 +122,7 @@ my_counties <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data
 
 tib <- tribble(
   ~state, ~county, ~note,
-  "Washington", "Whitman","",
+#  "Washington", "Whitman","",
   "Texas", "Travis", "",
   "Texas", "Lubbock","",
   "Montana", "Lewis and Clark","",
@@ -131,20 +131,24 @@ tib <- tribble(
   "Arizona", "Maricopa","",
   "Oregon", "Multnomah","",
   "Massachusetts", "Hampshire","" ,
-  "Georgia", "Bulloch", "",
-  "Mississippi", "Lafayette","",
-  "Missouri","Greene","",
-  "Illinois", "Champaign","",
-  "Colorado", "Summit","",
-  "Florida", "Leon","",
-  "Oklahoma", "Garfield","",
-  "Oklahoma", "Payne","",
-  "Oklahoma", "Muskogee","",
-  "Iowa", "Story","",
-  "Iowa", "Johnson","",
-  "North Carolina", "Orange","",
-  "Indiana", "Delaware", "Ball State University"
+  "Texas","Tarrant", "",
+  "Texas","El Paso", "",
+  "Texas","Midland", "",
+  "Texas","Harris", "",
+#  "Georgia", "Bulloch", "",
+#  "Mississippi", "Lafayette","",
+  # "Missouri","Greene","",
+  # "Illinois", "Champaign","",
+  # "Colorado", "Summit","",
+  # "Florida", "Leon","",
+   "Oklahoma", "Garfield","",
+   "Oklahoma", "Payne","",
+   "Oklahoma", "Muskogee","",
+  # "Iowa", "Story","",
+  # "Iowa", "Johnson","",
+  # "North Carolina", "Orange","",
+  # "Indiana", "Delaware", "Ball State University"
 ) %>% arrange(state, county)
 
-future::plan(future::multisession, workers = 2)
+future::plan(future::multisession, workers = 4)
 furrr::future_map2(tib$state, tib$county, ~plot_county(.x, .y, counties = my_counties))
