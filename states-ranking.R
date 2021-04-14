@@ -274,11 +274,14 @@ scp100k <- dummy %>%
   filter(!is.na(state))
 
 lhs <- scp100k %>% filter(date == min(date)) %>% 
-  select(state, ranking, density) 
+  select(state, ranking, density) %>%
+  mutate(init_rank=ranking)
 
 rhs <- scp100k %>% filter(date == max(date)) %>%
   #  filter(state %in% lhs$state) %>%
-  select(state, ranking, cases_per_100k)  
+  select(state, ranking, cases_per_100k) %>%
+  inner_join(lhs, by=c("state"="state")) %>%
+  rename(ranking = ranking.x)
 
 scp100k %>%
   #filter(date >= first_case - days(2)) %>%
@@ -288,10 +291,10 @@ scp100k %>%
   geom_line(aes(x=date, color = as.integer(state)), size=1.1) + 
   scale_y_reverse() + 
   scale_color_viridis_c(option = "viridis", begin=0.4)+
-  geom_text(data = lhs, aes(label=state), x= first_case - days(3),
+  geom_text(data = lhs, aes(label=state, color=init_rank), x= first_case - days(3),
             hjust = 1,
             size = 3.5) +
-  geom_text(data = rhs, aes(label=state), x= max(scp100k$date) + days(1),
+  geom_text(data = rhs, aes(label=state, color=init_rank), x= max(scp100k$date) + days(1),
             hjust = 0,
             size = 3.5) +
   coord_cartesian(xlim = c(first_case - days(16), 
