@@ -436,6 +436,14 @@ csla  %>%
   ) +
   xlim(ymd("2020-03-01", max(csla$date)))
 
+axis_text_color <- function(plot, col = "color") {
+  c <- ggplot_build(plot)$data[[1]]
+  plot +
+    theme(axis.text.y = element_text(colour = c[[col]]))
+}
+
+#plot<-axis_text_color(plot)
+
 dpi <- 100
 
 img_name <- "top-states-ridges-wide.png"
