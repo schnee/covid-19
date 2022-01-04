@@ -10,7 +10,7 @@ devtools::load_all("./covidutil/")
 
 images <- list()
 
-states_to_remove <- c("Guam", "Northern Mariana Islands", "Virgin Islands")
+states_to_remove <- c("Guam", "Northern Mariana Islands", "Virgin Islands", "American Samoa")
 
 # read from the NY Times state-level covid data, and from the US Census
 # population data, and from jakevdp's github repo for the state areas
