@@ -398,7 +398,7 @@ ordered_by_last_highpoint <- csla %>%
   #  select(top_by_cases, date, mean_7) %>%
   arrange(date, mean_7, state)
 
-scale_factor <- 0.001
+scale_factor <- 0.0005
 
 csla  %>% 
   mutate(
@@ -444,10 +444,10 @@ axis_text_color <- function(plot, col = "color") {
 
 #plot<-axis_text_color(plot)
 
-dpi <- 100
+dpi <- 300
 
 img_name <- "top-states-ridges-wide.png"
-ggsave(img_name, width = 16, height = 9 , dpi=dpi, type = "cairo")
+ggsave(img_name, width = 16, height = 9 , dpi=dpi)
 
 images <- c(images, img_name)
 
